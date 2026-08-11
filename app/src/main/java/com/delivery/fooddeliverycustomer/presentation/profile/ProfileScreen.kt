@@ -288,7 +288,7 @@ fun ProfileScreen(
             },
             shape = RoundedCornerShape(12.dp),
             sheetState = logoutSheetState,
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             LogoutConfirmationSheet(
                 onCancel = {
