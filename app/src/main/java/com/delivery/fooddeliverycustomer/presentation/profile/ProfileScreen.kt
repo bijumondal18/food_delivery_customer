@@ -1,6 +1,7 @@
 package com.delivery.fooddeliverycustomer.presentation.profile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
+import com.delivery.fooddeliverycustomer.core.ui.theme.AppDarkGradient
+import com.delivery.fooddeliverycustomer.core.ui.theme.AppHomeGradient
+import com.delivery.fooddeliverycustomer.core.ui.theme.AppLightGradient
 
 @Composable
 fun ProfileScreen(
@@ -56,7 +60,9 @@ fun ProfileScreen(
                 .background(
                     MaterialTheme.colorScheme.background
                 )
-                .padding(paddingValues)
+                .padding(
+                    bottom = paddingValues.calculateBottomPadding()
+                )
         ) {
 
             // Header
@@ -64,12 +70,11 @@ fun ProfileScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Color(0xFFFFF3EE),
-                                Color.White
-                            )
-                        )
+                        brush = if (isSystemInDarkTheme()) {
+                            AppDarkGradient
+                        } else {
+                            AppLightGradient
+                        }
                     )
                     .padding(
                         horizontal = 20.dp,
@@ -122,15 +127,17 @@ fun ProfileScreen(
                                 .align(Alignment.BottomEnd)
                                 .clip(CircleShape)
                                 .background(
-                                    MaterialTheme.colorScheme.primary
+                                    MaterialTheme.colorScheme.onBackground
                                 )
+                                .padding(2.dp)
+
                         ) {
 
                             Icon(
-                                imageVector = Icons.Default.Edit,
+                                painter = painterResource(R.drawable.edit_24px),
                                 contentDescription = "Edit profile",
-                                tint = Color.White,
-                                modifier = Modifier.size(17.dp)
+                                tint = MaterialTheme.colorScheme.background,
+                                modifier = Modifier.size(16.dp)
                             )
                         }
                     }

@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.delivery.fooddeliverycustomer.R
 
 data class Order(
@@ -61,13 +62,20 @@ fun OrderScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "My Orders"
-                    )
-                }
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    text = "My Orders",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
         }
 
     ) { paddingValues ->
@@ -79,7 +87,8 @@ fun OrderScreen(
         ) {
 
             TabRow(
-                selectedTabIndex = selectedTab
+                selectedTabIndex = selectedTab,
+                containerColor = MaterialTheme.colorScheme.background
             ) {
 
                 Tab(

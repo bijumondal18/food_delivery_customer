@@ -1,5 +1,6 @@
 package com.delivery.fooddeliverycustomer.presentation.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.delivery.fooddeliverycustomer.presentation.auth.login.LoginBottomSheet
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.filled.Person
@@ -29,10 +34,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.delivery.fooddeliverycustomer.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,103 +59,99 @@ fun HomeScreen(
         viewModel.loadLocation()
     }
 
-    Scaffold(
-
-        topBar = {
-
-            TopAppBar(
-
-                title = {
-
-                    Column {
-
-                        Text(
-                            text = "Deliver to"
-                        )
-
-                        Text(
-                            text = state.location?.address
-                                ?: "Fetching location...",
-                            style =
-                                androidx.compose.material3.MaterialTheme
-                                    .typography
-                                    .bodySmall
-                        )
-                    }
-                },
-
-                navigationIcon = {
-
-                    IconButton(
-                        onClick = {
-                            // TODO:
-                            // Open location selector
-                        }
-                    ) {
-
-                        Icon(
-                            imageVector =
-                                Icons.Default.LocationOn,
-                            contentDescription =
-                                "Location"
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(
-                        onClick = {
-                        }
-                    ) {
-
-                        if (!state.profileImageUrl.isNullOrEmpty()) {
-
-                            AsyncImage(
-                                model = state.profileImageUrl,
-                                contentDescription = "Profile",
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clip(CircleShape)
-                            )
-
-                        } else {
-
-                            Surface(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clip(CircleShape),
-                                color = MaterialTheme.colorScheme.primary
-                            ) {
-
-                                Icon(
-                                    imageVector = Icons.Default.Person,
-                                    contentDescription = "Profile",
-                                    tint = Color.White,
-                                    modifier = Modifier.padding(8.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-            )
-        }
-
-    ) { paddingValues ->
+    Scaffold() { paddingValues ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
+                .padding(
+                    bottom = paddingValues.calculateBottomPadding()
+                )
         ) {
 
-            Text(
-                text = "What are you craving today?",
-                style =
-                    androidx.compose.material3.MaterialTheme
-                        .typography
-                        .headlineMedium
-            )
+            // Compact App Bar
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                // Location
+                IconButton(
+                    onClick = {
+                        // TODO: Open location selector
+                    }
+                ) {
+
+                    Icon(
+                        painter = painterResource(
+                            R.drawable.location_on_24px
+                        ),
+                        contentDescription = "Location",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+
+                    Text(
+                        text = state.location?.address
+                            ?: "Fetching location...",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1
+                    )
+                }
+
+                // Profile
+                IconButton(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    onClick = {
+                        // TODO: Navigate to notification screen
+                    }
+                ) {
+
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(
+                                MaterialTheme.colorScheme.primary.copy(
+                                    alpha = 0.10f
+                                )
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Icon(
+                            painter = painterResource(
+                                R.drawable.notifications_24px
+                            ),
+                            contentDescription = "Notification",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+
+                Text(
+                    text = "What are you craving today?",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
+
     }
 
     if (showLoginSheet) {
