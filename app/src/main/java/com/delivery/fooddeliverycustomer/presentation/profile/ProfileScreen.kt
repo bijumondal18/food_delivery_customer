@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -54,7 +55,7 @@ fun ProfileScreen(
 
     Scaffold { paddingValues ->
 
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
@@ -66,153 +67,206 @@ fun ProfileScreen(
         ) {
 
             // Header
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        brush = if (isSystemInDarkTheme()) {
-                            AppDarkGradient
-                        } else {
-                            AppLightGradient
-                        }
-                    )
-                    .padding(
-                        horizontal = 20.dp,
-                        vertical = 28.dp
-                    )
-            ) {
+            item {
 
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxWidth()
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            brush = if (isSystemInDarkTheme()) {
+                                AppDarkGradient
+                            } else {
+                                AppLightGradient
+                            }
+                        )
+                        .padding(
+                            horizontal = 20.dp,
+                            vertical = 28.dp
+                        )
                 ) {
 
-                    Box {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
 
-                        if (!profileImageUrl.isNullOrEmpty()) {
+                        Box {
 
-                            AsyncImage(
-                                model = profileImageUrl,
-                                contentDescription = "Profile",
+                            if (!profileImageUrl.isNullOrEmpty()) {
+
+                                AsyncImage(
+                                    model = profileImageUrl,
+                                    contentDescription = "Profile",
+                                    modifier = Modifier
+                                        .size(92.dp)
+                                        .clip(CircleShape)
+                                )
+
+                            } else {
+
+                                Box(
+                                    modifier = Modifier
+                                        .size(92.dp)
+                                        .clip(CircleShape)
+                                        .background(
+                                            MaterialTheme.colorScheme.primary
+                                        ),
+                                    contentAlignment = Alignment.Center
+                                ) {
+
+                                    Icon(
+                                        imageVector = Icons.Default.Person,
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier.size(48.dp)
+                                    )
+                                }
+                            }
+
+                            IconButton(
+                                onClick = onEditProfile,
                                 modifier = Modifier
-                                    .size(92.dp)
-                                    .clip(CircleShape)
-                            )
-
-                        } else {
-
-                            Box(
-                                modifier = Modifier
-                                    .size(92.dp)
+                                    .size(34.dp)
+                                    .align(Alignment.BottomEnd)
                                     .clip(CircleShape)
                                     .background(
-                                        MaterialTheme.colorScheme.primary
-                                    ),
-                                contentAlignment = Alignment.Center
+                                        MaterialTheme.colorScheme.onBackground
+                                    )
+                                    .padding(2.dp)
+
                             ) {
 
                                 Icon(
-                                    imageVector = Icons.Default.Person,
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(48.dp)
+                                    painter = painterResource(R.drawable.edit_24px),
+                                    contentDescription = "Edit profile",
+                                    tint = MaterialTheme.colorScheme.background,
+                                    modifier = Modifier.size(16.dp)
                                 )
                             }
                         }
 
-                        IconButton(
-                            onClick = onEditProfile,
-                            modifier = Modifier
-                                .size(34.dp)
-                                .align(Alignment.BottomEnd)
-                                .clip(CircleShape)
-                                .background(
-                                    MaterialTheme.colorScheme.onBackground
-                                )
-                                .padding(2.dp)
+                        Spacer(
+                            modifier = Modifier.height(12.dp)
+                        )
 
-                        ) {
+                        Text(
+                            text = name,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
 
-                            Icon(
-                                painter = painterResource(R.drawable.edit_24px),
-                                contentDescription = "Edit profile",
-                                tint = MaterialTheme.colorScheme.background,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
+                        Text(
+                            text = phone,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
+                }
+            }
+            item {
+
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+
+                    Text(
+                        text = "Account Settings",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    ProfileMenuItem(
+                        icon = R.drawable.location_on_24px,
+                        title = "Saved Addresses",
+                        subtitle = "Manage your delivery addresses",
+                        onClick = {}
+                    )
+
+                    ProfileMenuItem(
+                        icon = R.drawable.notifications_24px,
+                        title = "Notifications",
+                        subtitle = "Manage notification preferences",
+                        onClick = {}
+                    )
+
+                    ProfileMenuItem(
+                        icon = R.drawable.settings_24px,
+                        title = "Settings",
+                        subtitle = "App preferences",
+                        onClick = {}
+                    )
+
+                    ProfileMenuItem(
+                        icon = R.drawable.help_24px,
+                        title = "Help & Support",
+                        subtitle = "We're here to help",
+                        onClick = {}
+                    )
 
                     Spacer(
                         modifier = Modifier.height(12.dp)
                     )
 
                     Text(
-                        text = name,
-                        style = MaterialTheme.typography.titleLarge,
+                        text = "Feedback",
+                        style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
 
-                    Text(
-                        text = phone,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    ProfileMenuItem(
+                        icon = R.drawable.help_24px,
+                        title = "Terms & Conditions",
+                        subtitle = "",
+                        onClick = {}
+                    )
+
+                    ProfileMenuItem(
+                        icon = R.drawable.help_24px,
+                        title = "Privacy Policy",
+                        subtitle = "",
+                        onClick = {}
+                    )
+
+                    ProfileMenuItem(
+                        icon = R.drawable.help_24px,
+                        title = "Restaurant Partner Terms & Conditions",
+                        subtitle = "",
+                        onClick = {}
+                    )
+
+                    ProfileMenuItem(
+                        icon = R.drawable.help_24px,
+                        title = "TastyGo Refund Policy",
+                        subtitle = "",
+                        onClick = {}
+                    )
+
+                    ProfileMenuItem(
+                        icon = R.drawable.help_24px,
+                        title = "Customer Support",
+                        subtitle = "",
+                        onClick = {}
+                    )
+
+
+                    Spacer(
+                        modifier = Modifier.height(12.dp)
+                    )
+
+                    ProfileMenuItem(
+                        icon = R.drawable.logout_24px,
+                        title = "Logout",
+                        subtitle = "Sign out from your account",
+                        iconTint = MaterialTheme.colorScheme.primary,
+                        onClick = onLogout
                     )
                 }
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-
-                Text(
-                    text = "Account Settings",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-
-                ProfileMenuItem(
-                    icon = R.drawable.location_on_24px,
-                    title = "Saved Addresses",
-                    subtitle = "Manage your delivery addresses",
-                    onClick = {}
-                )
-
-                ProfileMenuItem(
-                    icon = R.drawable.notifications_24px,
-                    title = "Notifications",
-                    subtitle = "Manage notification preferences",
-                    onClick = {}
-                )
-
-                ProfileMenuItem(
-                    icon = R.drawable.settings_24px,
-                    title = "Settings",
-                    subtitle = "App preferences",
-                    onClick = {}
-                )
-
-                ProfileMenuItem(
-                    icon = R.drawable.help_24px,
-                    title = "Help & Support",
-                    subtitle = "We're here to help",
-                    onClick = {}
-                )
-
-                Spacer(
-                    modifier = Modifier.height(8.dp)
-                )
-
-                ProfileMenuItem(
-                    icon = R.drawable.logout_24px,
-                    title = "Logout",
-                    subtitle = "Sign out from your account",
-                    iconTint = MaterialTheme.colorScheme.primary,
-                    onClick = onLogout
-                )
-            }
         }
     }
 }
@@ -241,7 +295,8 @@ private fun ProfileMenuItem(
 
         Row(
             modifier = Modifier
-                .fillMaxWidth().padding(vertical = 8.dp, horizontal = 8.dp),
+                .fillMaxWidth()
+                .padding(vertical = 8.dp, horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
