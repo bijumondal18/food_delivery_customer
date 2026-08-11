@@ -36,16 +36,21 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,6 +71,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 private data class ProfileMenu(val icon: Int, val title: String, val subtitle: String = "")
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     profileImageUrl: String? = null,
@@ -76,7 +82,8 @@ fun ProfileScreen(
 ) {
     val listState = rememberLazyListState()
     val isDarkTheme = androidx.compose.foundation.isSystemInDarkTheme()
-    var contentVisible by remember { mutableStateOf(false) } /* * Trigger the screen entrance animation only once. */
+    var contentVisible by remember { mutableStateOf(false) }
+    /* * Trigger the screen entrance animation only once. */
 
     LaunchedEffect(Unit) {
         contentVisible = true
@@ -120,6 +127,16 @@ fun ProfileScreen(
         )
     }
 
+
+    val logoutSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+
+    var showLogoutSheet by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+
     Scaffold { paddingValues ->
         AnimatedVisibility(
             visible = contentVisible,
@@ -160,7 +177,7 @@ fun ProfileScreen(
                 item {
 
                     Text(
-                        text = "Account Settings",
+                        text = "Account",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(
@@ -235,6 +252,12 @@ fun ProfileScreen(
                         modifier = Modifier.height(4.dp)
                     )
 
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+
+                    Spacer(
+                        modifier = Modifier.height(4.dp)
+                    )
+
                     ProfileMenuItem(
                         icon = R.drawable.logout_24px,
                         title = "Logout",
@@ -243,13 +266,42 @@ fun ProfileScreen(
                         modifier = Modifier.padding(
                             horizontal = 20.dp
                         ),
-                        onClick = onLogout
+                        onClick = {
+                            showLogoutSheet = true
+                        }//onLogout
                     )
                 }
             }
         }
     }
+
+    if (showLogoutSheet) {
+        ModalBottomSheet(
+            dragHandle = {},
+            onDismissRequest = {
+                showLogoutSheet = false
+            },
+            shape = RoundedCornerShape(12.dp),
+            sheetState = logoutSheetState,
+            containerColor = MaterialTheme.colorScheme.background
+        ) {
+            LogoutConfirmationSheet(
+                onCancel = {
+                    showLogoutSheet = false
+                },
+                onLogout = {
+                    showLogoutSheet = false
+
+                    // Perform logout here
+                    // viewModel.logout()
+                }
+            )
+        }
+    }
+
 }
+
+
 
 /* * ============================================================ * PROFILE HEADER * ============================================================ */
 
@@ -281,20 +333,20 @@ private fun ProfileHeader(
 
             // Profile Avatar
             Box(
-                modifier = Modifier.size(92.dp)
+                modifier = Modifier.size(64.dp)
             ) {
                 if (!profileImageUrl.isNullOrEmpty()) {
                     AsyncImage(
                         model = profileImageUrl,
                         contentDescription = "Profile",
                         modifier = Modifier
-                            .size(92.dp)
+                            .size(64.dp)
                             .clip(CircleShape)
                     )
                 } else {
                     Box(
                         modifier = Modifier
-                            .size(92.dp)
+                            .size(64.dp)
                             .clip(CircleShape)
                             .background(MaterialTheme.colorScheme.primary),
                         contentAlignment = Alignment.Center
@@ -312,7 +364,7 @@ private fun ProfileHeader(
                 IconButton(
                     onClick = onEditProfile,
                     modifier = Modifier
-                        .size(34.dp)
+                        .size(24.dp)
                         .align(Alignment.BottomEnd)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.onBackground)
@@ -375,19 +427,23 @@ private fun ProfileMenuItem(
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
-        ) { /* * Icon container */ Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)),
-            contentAlignment = Alignment.Center
         ) {
-            Icon(
-                painter = painterResource(icon),
-                contentDescription = null,
-                tint = iconTint
-            )
-        } /* * Text */
+            /* * Icon container */
+
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(icon),
+                    contentDescription = null,
+                    tint = iconTint
+                )
+            }
+            /* * Text */
 
             Column(
                 modifier = Modifier
@@ -407,7 +463,8 @@ private fun ProfileMenuItem(
                         maxLines = 1
                     )
                 }
-            } /* * Chevron */
+            }
+            /* * Chevron */
             Icon(
                 painter =
                     painterResource(R.drawable.chevron_right_24px),
