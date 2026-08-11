@@ -252,7 +252,9 @@ fun ProfileScreen(
                         modifier = Modifier.height(4.dp)
                     )
 
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                    HorizontalDivider(
+                        thickness = 0.5.dp
+                    )
 
                     Spacer(
                         modifier = Modifier.height(4.dp)
@@ -300,7 +302,6 @@ fun ProfileScreen(
     }
 
 }
-
 
 
 /* * ============================================================ * PROFILE HEADER * ============================================================ */
