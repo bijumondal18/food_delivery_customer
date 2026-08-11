@@ -6,6 +6,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -57,6 +59,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -334,47 +337,63 @@ private fun ProfileHeader(
 
             // Profile Avatar
             Box(
-                modifier = Modifier.size(64.dp)
+                modifier = Modifier.size(92.dp)
             ) {
+                // Profile avatar
                 if (!profileImageUrl.isNullOrEmpty()) {
                     AsyncImage(
                         model = profileImageUrl,
                         contentDescription = "Profile",
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(64.dp)
+                            .size(92.dp)
                             .clip(CircleShape)
                     )
                 } else {
                     Box(
                         modifier = Modifier
-                            .size(64.dp)
+                            .size(92.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary),
+                            .background(
+                                MaterialTheme.colorScheme.primary
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.person_3_24px),
+                            painter = painterResource(
+                                R.drawable.person_3_24px
+                            ),
                             contentDescription = null,
                             tint = Color.White,
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier.size(44.dp)
                         )
                     }
                 }
 
-                // Edit button
-                IconButton(
-                    onClick = onEditProfile,
+                // Small edit button
+                Box(
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(32.dp)
                         .align(Alignment.BottomEnd)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.onBackground)
+                        .background(
+                            MaterialTheme.colorScheme.secondary
+                        )
+                        .border(
+                            width = 1.5.dp,
+                            color = MaterialTheme.colorScheme.background,
+                            shape = CircleShape
+                        )
+                        .clickable(onClick = onEditProfile),
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.edit_24px),
+                        painter = painterResource(
+                            R.drawable.edit_24px
+                        ),
                         contentDescription = "Edit profile",
-                        tint = MaterialTheme.colorScheme.background,
-                        modifier = Modifier.size(16.dp)
+                        tint = Color.Black,
+                        modifier = Modifier.size(14.dp)
                     )
                 }
             }

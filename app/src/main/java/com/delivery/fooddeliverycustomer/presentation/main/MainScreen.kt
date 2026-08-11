@@ -36,31 +36,39 @@ private data class BottomNavItem(
 sealed class BottomNavRoute(
     val route: String,
     val title: String,
-    val icon: Int
+    val icon: Int,
+    val selectedIcon: Int
 ) {
 
     data object Home : BottomNavRoute(
         route = "home",
         title = "Home",
-        icon = R.drawable.home_24px
+        icon = R.drawable.home_24px,
+        selectedIcon = R.drawable.home_filled_24px
     )
 
     data object Cart : BottomNavRoute(
         route = "cart",
         title = "Cart",
-        icon = R.drawable.shopping_cart_24px
+        icon = R.drawable.shopping_cart_24px,
+        selectedIcon = R.drawable.shopping_cart_filled_24px
+
     )
 
     data object Orders : BottomNavRoute(
         route = "orders",
         title = "Orders",
-        icon = R.drawable.order_approve_24px
+        icon = R.drawable.order_approve_24px,
+        selectedIcon = R.drawable.order_approve_filled_24px
+
     )
 
     data object Profile : BottomNavRoute(
         route = "profile",
         title = "Profile",
-        icon = R.drawable.person_3_24px
+        icon = R.drawable.person_3_24px,
+        selectedIcon = R.drawable.person_3_filled_24px
+
     )
 }
 
@@ -126,7 +134,7 @@ fun MainScreen() {
 
                             Icon(
                                 painter = painterResource(
-                                    id = item.icon
+                                    id = if(selected) item.selectedIcon else item.icon
                                 ),
                                 contentDescription = item.title,
 
