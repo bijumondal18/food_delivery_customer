@@ -371,7 +371,7 @@ private fun ProfileMenuItem(
                 Text(
                     text = title,
                     fontWeight = FontWeight.SemiBold,
-                    maxLines = 1
+                    maxLines = 2
                 )
                 if (subtitle.isNotBlank()) {
                     Text(
