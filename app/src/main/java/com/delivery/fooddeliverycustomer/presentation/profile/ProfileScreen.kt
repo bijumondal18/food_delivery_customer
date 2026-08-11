@@ -168,7 +168,7 @@ fun ProfileScreen(
             ) {
 
                 Text(
-                    text = "Account",
+                    text = "Account Settings",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -229,29 +229,29 @@ private fun ProfileMenuItem(
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
+            defaultElevation = 0.dp,
+            focusedElevation = 0.dp,
         )
     ) {
 
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp),
+                .fillMaxWidth().padding(vertical = 8.dp, horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Box(
                 modifier = Modifier
-                    .size(44.dp)
-                    .clip(RoundedCornerShape(14.dp))
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(10.dp))
                     .background(
                         MaterialTheme.colorScheme.primary.copy(
-                            alpha = 0.10f
+                            alpha = 0.08f
                         )
                     ),
                 contentAlignment = Alignment.Center
