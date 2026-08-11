@@ -1,10 +1,16 @@
 package com.delivery.fooddeliverycustomer.presentation.profile
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +19,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -29,6 +37,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +56,10 @@ import com.delivery.fooddeliverycustomer.R
 import com.delivery.fooddeliverycustomer.core.ui.theme.AppDarkGradient
 import com.delivery.fooddeliverycustomer.core.ui.theme.AppHomeGradient
 import com.delivery.fooddeliverycustomer.core.ui.theme.AppLightGradient
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
+
+private data class ProfileMenu(val icon: Int, val title: String, val subtitle: String = "")
 
 @Composable
 fun ProfileScreen(
@@ -52,209 +69,165 @@ fun ProfileScreen(
     onEditProfile: () -> Unit = {},
     onLogout: () -> Unit = {}
 ) {
+    val listState = rememberLazyListState()
+    val isDarkTheme = androidx.compose.foundation.isSystemInDarkTheme()
+    var contentVisible by remember { mutableStateOf(false) } /* * Trigger the screen entrance animation only once. */
+
+    LaunchedEffect(Unit) {
+        contentVisible = true
+    }
+
+    /* * Static menu data is remembered so that these lists * aren't recreated on every recomposition. */
+    val accountItems = remember {
+        listOf(
+            ProfileMenu(
+                icon = R.drawable.location_on_24px,
+                title = "Saved Addresses",
+                subtitle = "Manage your delivery addresses"
+            ),
+            ProfileMenu(
+                icon = R.drawable.notifications_24px,
+                title = "Notifications",
+                subtitle = "Manage notification preferences"
+            ),
+            ProfileMenu(
+                icon = R.drawable.settings_24px,
+                title = "Settings",
+                subtitle = "App preferences"
+            ),
+            ProfileMenu(
+                icon = R.drawable.help_24px,
+                title = "Help & Support",
+                subtitle = "We're here to help"
+            )
+        )
+    }
+    val feedbackItems = remember {
+        listOf(
+            ProfileMenu(icon = R.drawable.help_24px, title = "Terms & Conditions"),
+            ProfileMenu(icon = R.drawable.help_24px, title = "Privacy Policy"),
+            ProfileMenu(
+                icon = R.drawable.help_24px,
+                title = "Restaurant Partner Terms & Conditions"
+            ),
+            ProfileMenu(icon = R.drawable.help_24px, title = "TastyGo Refund Policy"),
+            ProfileMenu(icon = R.drawable.help_24px, title = "Customer Support")
+        )
+    }
 
     Scaffold { paddingValues ->
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    MaterialTheme.colorScheme.background
+        AnimatedVisibility(
+            visible = contentVisible,
+            enter = fadeIn(
+                animationSpec = tween(
+                    durationMillis = 350,
+                    easing = FastOutSlowInEasing
                 )
-                .padding(
-                    bottom = paddingValues.calculateBottomPadding()
-                )
+            ) + slideInVertically(
+                initialOffsetY = { 20 },
+                animationSpec = tween(durationMillis = 350, easing = FastOutSlowInEasing)
+            )
         ) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        MaterialTheme.colorScheme.background
+                    ),
+                contentPadding = PaddingValues(
+                    bottom = paddingValues.calculateBottomPadding() + 20.dp
+                ),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
 
-            // Header
-            item {
+                item {
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            brush = if (isSystemInDarkTheme()) {
-                                AppDarkGradient
-                            } else {
-                                AppLightGradient
-                            }
-                        )
-                        .padding(
-                            horizontal = 20.dp,
-                            vertical = 28.dp
-                        )
-                ) {
-
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-
-                        Box {
-
-                            if (!profileImageUrl.isNullOrEmpty()) {
-
-                                AsyncImage(
-                                    model = profileImageUrl,
-                                    contentDescription = "Profile",
-                                    modifier = Modifier
-                                        .size(92.dp)
-                                        .clip(CircleShape)
-                                )
-
-                            } else {
-
-                                Box(
-                                    modifier = Modifier
-                                        .size(92.dp)
-                                        .clip(CircleShape)
-                                        .background(
-                                            MaterialTheme.colorScheme.primary
-                                        ),
-                                    contentAlignment = Alignment.Center
-                                ) {
-
-                                    Icon(
-                                        imageVector = Icons.Default.Person,
-                                        contentDescription = null,
-                                        tint = Color.White,
-                                        modifier = Modifier.size(48.dp)
-                                    )
-                                }
-                            }
-
-                            IconButton(
-                                onClick = onEditProfile,
-                                modifier = Modifier
-                                    .size(34.dp)
-                                    .align(Alignment.BottomEnd)
-                                    .clip(CircleShape)
-                                    .background(
-                                        MaterialTheme.colorScheme.onBackground
-                                    )
-                                    .padding(2.dp)
-
-                            ) {
-
-                                Icon(
-                                    painter = painterResource(R.drawable.edit_24px),
-                                    contentDescription = "Edit profile",
-                                    tint = MaterialTheme.colorScheme.background,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                            }
-                        }
-
-                        Spacer(
-                            modifier = Modifier.height(12.dp)
-                        )
-
-                        Text(
-                            text = name,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Text(
-                            text = phone,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                    ProfileHeader(
+                        profileImageUrl = profileImageUrl,
+                        name = name,
+                        phone = phone,
+                        onEditProfile = onEditProfile,
+                        isDarkTheme = isDarkTheme
+                    )
                 }
-            }
-            item {
 
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
+                item {
 
                     Text(
                         text = "Account Settings",
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(
+                            start = 20.dp,
+                            end = 20.dp,
+                            top = 12.dp,
+                            bottom = 2.dp
+                        )
                     )
+                }
 
-                    ProfileMenuItem(
-                        icon = R.drawable.location_on_24px,
-                        title = "Saved Addresses",
-                        subtitle = "Manage your delivery addresses",
-                        onClick = {}
-                    )
+                item {
 
-                    ProfileMenuItem(
-                        icon = R.drawable.notifications_24px,
-                        title = "Notifications",
-                        subtitle = "Manage notification preferences",
-                        onClick = {}
-                    )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
 
-                    ProfileMenuItem(
-                        icon = R.drawable.settings_24px,
-                        title = "Settings",
-                        subtitle = "App preferences",
-                        onClick = {}
-                    )
+                        accountItems.forEach { item ->
 
-                    ProfileMenuItem(
-                        icon = R.drawable.help_24px,
-                        title = "Help & Support",
-                        subtitle = "We're here to help",
-                        onClick = {}
-                    )
+                            ProfileMenuItem(
+                                icon = item.icon,
+                                title = item.title,
+                                subtitle = item.subtitle,
+                                modifier = Modifier.padding(
+                                    horizontal = 20.dp
+                                ),
+                                onClick = {}
+                            )
+                        }
+                    }
+                }
 
-                    Spacer(
-                        modifier = Modifier.height(12.dp)
-                    )
+                item {
 
                     Text(
                         text = "Feedback",
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(
+                            start = 20.dp,
+                            end = 20.dp,
+                            top = 12.dp,
+                            bottom = 2.dp
+                        )
                     )
+                }
 
-                    ProfileMenuItem(
-                        icon = R.drawable.help_24px,
-                        title = "Terms & Conditions",
-                        subtitle = "",
-                        onClick = {}
-                    )
+                item {
 
-                    ProfileMenuItem(
-                        icon = R.drawable.help_24px,
-                        title = "Privacy Policy",
-                        subtitle = "",
-                        onClick = {}
-                    )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
 
-                    ProfileMenuItem(
-                        icon = R.drawable.help_24px,
-                        title = "Restaurant Partner Terms & Conditions",
-                        subtitle = "",
-                        onClick = {}
-                    )
+                        feedbackItems.forEach { item ->
 
-                    ProfileMenuItem(
-                        icon = R.drawable.help_24px,
-                        title = "TastyGo Refund Policy",
-                        subtitle = "",
-                        onClick = {}
-                    )
+                            ProfileMenuItem(
+                                icon = item.icon,
+                                title = item.title,
+                                subtitle = item.subtitle,
+                                modifier = Modifier.padding(
+                                    horizontal = 20.dp
+                                ),
+                                onClick = {}
+                            )
+                        }
+                    }
+                }
 
-                    ProfileMenuItem(
-                        icon = R.drawable.help_24px,
-                        title = "Customer Support",
-                        subtitle = "",
-                        onClick = {}
-                    )
-
+                item {
 
                     Spacer(
-                        modifier = Modifier.height(12.dp)
+                        modifier = Modifier.height(4.dp)
                     )
 
                     ProfileMenuItem(
@@ -262,84 +235,158 @@ fun ProfileScreen(
                         title = "Logout",
                         subtitle = "Sign out from your account",
                         iconTint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(
+                            horizontal = 20.dp
+                        ),
                         onClick = onLogout
                     )
                 }
             }
-
         }
     }
-}
+} /* * ============================================================ * PROFILE HEADER * ============================================================ */
+
+@Composable
+private fun ProfileHeader(
+    profileImageUrl: String?,
+    name: String,
+    phone: String,
+    onEditProfile: () -> Unit,
+    isDarkTheme: Boolean
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                brush = if (isDarkTheme) {
+                    AppDarkGradient
+                } else {
+                    AppLightGradient
+                }
+            )
+            .padding(horizontal = 20.dp, vertical = 28.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) { /* * Profile image + edit button */ Box {
+            if (!profileImageUrl.isNullOrEmpty()) {
+                AsyncImage(
+                    model = profileImageUrl,
+                    contentDescription = "Profile",
+                    modifier = Modifier
+                        .size(92.dp)
+                        .clip(CircleShape)
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(92.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.person_3_24px),
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(48.dp)
+                    )
+                }
+            } /* * Edit profile button */
+
+            IconButton(
+                onClick =
+                    onEditProfile,
+                modifier = Modifier
+                    .size(34.dp)
+                    .align(Alignment.BottomEnd)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.onBackground)
+                    .padding(2.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.edit_24px),
+                    contentDescription = "Edit profile",
+                    tint = MaterialTheme.colorScheme.background,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+        }
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text =
+                    name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold
+            )
+            Text(
+                text =
+                    phone,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+} /* * ============================================================ * PROFILE MENU ITEM * ============================================================ */
 
 @Composable
 private fun ProfileMenuItem(
     icon: Int,
     title: String,
     subtitle: String,
+    modifier: Modifier = Modifier,
     iconTint: Color = MaterialTheme.colorScheme.primary,
     onClick: () -> Unit
 ) {
-
     Card(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp,
-            focusedElevation = 0.dp,
-        )
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 8.dp),
+                .padding(horizontal = 8.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
+        ) { /* * Icon container */ Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)),
+            contentAlignment = Alignment.Center
         ) {
-
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(
-                        MaterialTheme.colorScheme.primary.copy(
-                            alpha = 0.08f
-                        )
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-
-                Icon(
-                    painter = painterResource(icon),
-                    contentDescription = null,
-                    tint = iconTint
-                )
-            }
+            Icon(
+                painter = painterResource(icon),
+                contentDescription = null,
+                tint = iconTint
+            )
+        } /* * Text */
 
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 14.dp)
             ) {
-
                 Text(
                     text = title,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1
                 )
-
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
+                if (subtitle.isNotBlank()) {
+                    Text(
+                        text = subtitle,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1
+                    )
+                }
+            } /* * Chevron */
             Icon(
-                painter = painterResource(R.drawable.chevron_right_24px),
-                contentDescription = null
+                painter =
+                    painterResource(R.drawable.chevron_right_24px),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
