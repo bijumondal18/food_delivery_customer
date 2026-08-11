@@ -155,7 +155,7 @@ fun MainScreen() {
         NavHost(
             navController = navController,
             startDestination = BottomNavRoute.Home.route,
-            modifier = Modifier.padding(top = paddingValues.calculateTopPadding())
+            modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
         ) {
 
             composable(

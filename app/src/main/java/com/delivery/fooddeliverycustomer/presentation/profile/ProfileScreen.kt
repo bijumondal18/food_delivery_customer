@@ -13,11 +13,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -244,7 +249,9 @@ fun ProfileScreen(
             }
         }
     }
-} /* * ============================================================ * PROFILE HEADER * ============================================================ */
+}
+
+/* * ============================================================ * PROFILE HEADER * ============================================================ */
 
 @Composable
 private fun ProfileHeader(
@@ -264,69 +271,88 @@ private fun ProfileHeader(
                     AppLightGradient
                 }
             )
+            .statusBarsPadding()
             .padding(horizontal = 20.dp, vertical = 28.dp)
     ) {
-        Column(
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) { /* * Profile image + edit button */ Box {
-            if (!profileImageUrl.isNullOrEmpty()) {
-                AsyncImage(
-                    model = profileImageUrl,
-                    contentDescription = "Profile",
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            // Profile Avatar
+            Box(
+                modifier = Modifier.size(92.dp)
+            ) {
+                if (!profileImageUrl.isNullOrEmpty()) {
+                    AsyncImage(
+                        model = profileImageUrl,
+                        contentDescription = "Profile",
+                        modifier = Modifier
+                            .size(92.dp)
+                            .clip(CircleShape)
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .size(92.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.person_3_24px),
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(48.dp)
+                        )
+                    }
+                }
+
+                // Edit button
+                IconButton(
+                    onClick = onEditProfile,
                     modifier = Modifier
-                        .size(92.dp)
+                        .size(34.dp)
+                        .align(Alignment.BottomEnd)
                         .clip(CircleShape)
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(92.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary),
-                    contentAlignment = Alignment.Center
+                        .background(MaterialTheme.colorScheme.onBackground)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.person_3_24px),
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(48.dp)
+                        painter = painterResource(R.drawable.edit_24px),
+                        contentDescription = "Edit profile",
+                        tint = MaterialTheme.colorScheme.background,
+                        modifier = Modifier.size(16.dp)
                     )
                 }
-            } /* * Edit profile button */
+            }
 
-            IconButton(
-                onClick =
-                    onEditProfile,
-                modifier = Modifier
-                    .size(34.dp)
-                    .align(Alignment.BottomEnd)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onBackground)
-                    .padding(2.dp)
+            Spacer(modifier = Modifier.width(18.dp))
+
+            // Name + Phone
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.edit_24px),
-                    contentDescription = "Edit profile",
-                    tint = MaterialTheme.colorScheme.background,
-                    modifier = Modifier.size(16.dp)
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    text = phone,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text =
-                    name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold
-            )
-            Text(
-                text =
-                    phone,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
     }
-} /* * ============================================================ * PROFILE MENU ITEM * ============================================================ */
+}
+
+/* * ============================================================ * PROFILE MENU ITEM * ============================================================ */
 
 @Composable
 private fun ProfileMenuItem(
