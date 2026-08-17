@@ -171,7 +171,7 @@ fun ProfileScreen(
     }
 
 
-    Scaffold (
+    Scaffold(
         topBar = {
             ProfileCollapsedTopBar(
                 scrollProgress = scrollProgress,
@@ -179,7 +179,7 @@ fun ProfileScreen(
                 name = name
             )
         }
-    ){ paddingValues ->
+    ) { paddingValues ->
         AnimatedVisibility(
             visible = contentVisible,
             enter = fadeIn(
@@ -243,9 +243,6 @@ fun ProfileScreen(
                                 icon = item.icon,
                                 title = item.title,
                                 subtitle = item.subtitle,
-                                modifier = Modifier.padding(
-                                    horizontal = 20.dp
-                                ),
                                 onClick = {}
                             )
                         }
@@ -279,9 +276,6 @@ fun ProfileScreen(
                                 icon = item.icon,
                                 title = item.title,
                                 subtitle = item.subtitle,
-                                modifier = Modifier.padding(
-                                    horizontal = 20.dp
-                                ),
                                 onClick = {}
                             )
                         }
@@ -290,16 +284,9 @@ fun ProfileScreen(
 
                 item {
 
-                    Spacer(
-                        modifier = Modifier.height(4.dp)
-                    )
-
                     HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 4.dp),
                         thickness = 0.5.dp
-                    )
-
-                    Spacer(
-                        modifier = Modifier.height(4.dp)
                     )
 
                     ProfileMenuItem(
@@ -307,9 +294,6 @@ fun ProfileScreen(
                         title = "Logout",
                         subtitle = "Sign out from your account",
                         iconTint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(
-                            horizontal = 20.dp
-                        ),
                         onClick = {
                             showLogoutSheet = true
                         }//onLogout
@@ -477,14 +461,13 @@ private fun ProfileMenuItem(
     Card(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 8.dp),
+                .padding(vertical = 8.dp, horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             /* * Icon container */
@@ -493,7 +476,7 @@ private fun ProfileMenuItem(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)),
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(

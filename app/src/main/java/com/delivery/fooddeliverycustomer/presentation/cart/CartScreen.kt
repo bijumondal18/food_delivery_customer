@@ -1,6 +1,11 @@
 package com.delivery.fooddeliverycustomer.presentation.cart
 
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +38,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,6 +68,13 @@ fun CartScreen(
     onCheckout: () -> Unit = {}
 ) {
 
+    var contentVisible by remember { mutableStateOf(false) }
+    /* * Trigger the screen entrance animation only once. */
+
+    LaunchedEffect(Unit) {
+        contentVisible = true
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -71,64 +88,78 @@ fun CartScreen(
 
     ) { paddingValues ->
 
-        if (items.isEmpty()) {
-
-            EmptyCart(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
+        AnimatedVisibility(
+            visible = contentVisible,
+            enter = fadeIn(
+                animationSpec = tween(
+                    durationMillis = 350,
+                    easing = FastOutSlowInEasing
+                )
+            ) + slideInVertically(
+                initialOffsetY = { 20 },
+                animationSpec = tween(durationMillis = 350, easing = FastOutSlowInEasing)
             )
+        ) {
 
-        } else {
+            if (items.isEmpty()) {
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(horizontal = 16.dp)
-            ) {
-
-                items.forEach { item ->
-
-                    CartItemCard(
-                        item = item
-                    )
-
-                    Spacer(
-                        modifier = Modifier.height(10.dp)
-                    )
-                }
-
-                Spacer(
-                    modifier = Modifier.weight(1f)
-                )
-
-                PriceSummary()
-
-                Spacer(
-                    modifier = Modifier.height(12.dp)
-                )
-
-                Button(
-                    onClick = onCheckout,
+                EmptyCart(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(54.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor =
-                            MaterialTheme.colorScheme.primary
-                    )
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                )
+
+            } else {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(horizontal = 16.dp)
                 ) {
 
-                    Text(
-                        text = "Proceed to Checkout"
+                    items.forEach { item ->
+
+                        CartItemCard(
+                            item = item
+                        )
+
+                        Spacer(
+                            modifier = Modifier.height(10.dp)
+                        )
+                    }
+
+                    Spacer(
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    PriceSummary()
+
+                    Spacer(
+                        modifier = Modifier.height(12.dp)
+                    )
+
+                    Button(
+                        onClick = onCheckout,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(54.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor =
+                                MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+
+                        Text(
+                            text = "Proceed to Checkout"
+                        )
+                    }
+
+                    Spacer(
+                        modifier = Modifier.height(16.dp)
                     )
                 }
-
-                Spacer(
-                    modifier = Modifier.height(16.dp)
-                )
             }
         }
     }

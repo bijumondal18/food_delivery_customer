@@ -1,5 +1,10 @@
 package com.delivery.fooddeliverycustomer.presentation.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -125,6 +130,15 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
+
+    var contentVisible by remember { mutableStateOf(false) }
+    /* * Trigger the screen entrance animation only once. */
+
+    LaunchedEffect(Unit) {
+        contentVisible = true
+    }
+
+
     LaunchedEffect(Unit) {
         viewModel.loadLocation()
     }
@@ -137,197 +151,210 @@ fun HomeScreen(
         }
     )
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        state = listState
-    ) {
-
-        // --------------------------------------------------
-        // Location + Notification Header
-        // This scrolls away
-        // --------------------------------------------------
-
-        item {
-
-            HomeLocationHeader(
-                location = state.location?.address
-                    ?: "Fetching location...",
-
-                onLocationClick = {
-                    showLocationSheet = true
-                },
-
-                onNotificationClick = {
-                    // TODO: Open notifications
-                }
+    AnimatedVisibility(
+        visible = contentVisible,
+        enter = fadeIn(
+            animationSpec = tween(
+                durationMillis = 350,
+                easing = FastOutSlowInEasing
             )
-        }
+        ) + slideInVertically(
+            initialOffsetY = { 20 },
+            animationSpec = tween(durationMillis = 350, easing = FastOutSlowInEasing)
+        )
+    ) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = listState
+        ) {
 
-        // --------------------------------------------------
-        // Search Bar
-        // This remains pinned
-        // --------------------------------------------------
+            // --------------------------------------------------
+            // Location + Notification Header
+            // This scrolls away
+            // --------------------------------------------------
 
-        stickyHeader {
+            item {
 
-            Surface(
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.background,
-                shadowElevation = if (
-                    listState.firstVisibleItemIndex > 0
+                HomeLocationHeader(
+                    location = state.location?.address
+                        ?: "Fetching location...",
+
+                    onLocationClick = {
+                        showLocationSheet = true
+                    },
+
+                    onNotificationClick = {
+                        // TODO: Open notifications
+                    }
+                )
+            }
+
+            // --------------------------------------------------
+            // Search Bar
+            // This remains pinned
+            // --------------------------------------------------
+
+            stickyHeader {
+
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.background,
+                    shadowElevation = if (
+                        listState.firstVisibleItemIndex > 0
+                    ) {
+                        4.dp
+                    } else {
+                        0.dp
+                    }
                 ) {
-                    4.dp
-                } else {
-                    0.dp
-                }
-            ) {
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = 16.dp,
-                            vertical = 10.dp
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = 16.dp,
+                                vertical = 10.dp
+                            )
+                            .clip(
+                                RoundedCornerShape(12.dp)
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.outline,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .clickable {
+                                // Navigate to Search Screen
+                                onNavigateToSearch()
+                            }
+                            .padding(
+                                horizontal = 16.dp,
+                                vertical = 13.dp
+                            ),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(22.dp)
                         )
-                        .clip(
-                            RoundedCornerShape(12.dp)
+
+                        Spacer(
+                            modifier = Modifier.width(10.dp)
                         )
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.outline,
-                            shape = RoundedCornerShape(12.dp)
+
+                        Text(
+                            text = "Search food, restaurants...",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        .clickable {
-                            // Navigate to Search Screen
-                            onNavigateToSearch()
-                        }
-                        .padding(
-                            horizontal = 16.dp,
-                            vertical = 13.dp
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(22.dp)
-                    )
-
-                    Spacer(
-                        modifier = Modifier.width(10.dp)
-                    )
-
-                    Text(
-                        text = "Search food, restaurants...",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    }
                 }
             }
-        }
 
 
-        // --------------------------------------------------
-        // Banner
-        // --------------------------------------------------
+            // --------------------------------------------------
+            // Banner
+            // --------------------------------------------------
 
-        item {
-            HomeBannerPager(
-                pagerState = pagerState
-            )
-        }
+            item {
+                HomeBannerPager(
+                    pagerState = pagerState
+                )
+            }
 
-        // --------------------------------------------------
-        // Categories
-        // --------------------------------------------------
+            // --------------------------------------------------
+            // Categories
+            // --------------------------------------------------
 
-        item {
+            item {
 
 //            CategoriesSection()
-        }
+            }
 
-        // --------------------------------------------------
-        // Popular Restaurants
-        // --------------------------------------------------
+            // --------------------------------------------------
+            // Popular Restaurants
+            // --------------------------------------------------
 
-        item {
+            item {
 
 //            PopularRestaurantsSection()
-        }
+            }
 
-        // --------------------------------------------------
-        // Offers
-        // --------------------------------------------------
+            // --------------------------------------------------
+            // Offers
+            // --------------------------------------------------
 
-        item {
+            item {
 
 //            OffersSection()
+            }
+
+            // Add more sections here...
         }
 
-        // Add more sections here...
-    }
+        // ======================================================
+        // Location Bottom Sheet
+        // IMPORTANT: Outside LazyColumn
+        // ======================================================
 
-    // ======================================================
-    // Location Bottom Sheet
-    // IMPORTANT: Outside LazyColumn
-    // ======================================================
+        if (showLocationSheet) {
 
-    if (showLocationSheet) {
+            LocationBottomSheet(
+                currentLocation = state.location?.address,
 
-        LocationBottomSheet(
-            currentLocation = state.location?.address,
+                onDismiss = {
+                    showLocationSheet = false
+                },
 
-            onDismiss = {
-                showLocationSheet = false
-            },
+                onUseCurrentLocation = {
 
-            onUseCurrentLocation = {
+                    showLocationSheet = false
 
-                showLocationSheet = false
+                    viewModel.loadLocation()
+                },
 
-                viewModel.loadLocation()
-            },
+                onAddNewAddress = {
 
-            onAddNewAddress = {
+                    showLocationSheet = false
 
-                showLocationSheet = false
+                    // TODO:
+                    // Navigate to Add Address screen
+                },
 
-                // TODO:
-                // Navigate to Add Address screen
-            },
+                onLocationSelected = { location ->
 
-            onLocationSelected = { location ->
+                    showLocationSheet = false
 
-                showLocationSheet = false
+                    // TODO:
+                    // Save/select location
+                }
+            )
+        }
 
-                // TODO:
-                // Save/select location
-            }
-        )
-    }
+        // ======================================================
+        // Login Bottom Sheet
+        // IMPORTANT: Outside LazyColumn
+        // ======================================================
 
-    // ======================================================
-    // Login Bottom Sheet
-    // IMPORTANT: Outside LazyColumn
-    // ======================================================
+        if (showLoginSheet) {
 
-    if (showLoginSheet) {
+            LoginBottomSheet(
 
-        LoginBottomSheet(
+                onDismiss = {
+                    showLoginSheet = false
+                },
 
-            onDismiss = {
-                showLoginSheet = false
-            },
+                onGoogleLogin = {
+                    // TODO: Google login
+                },
 
-            onGoogleLogin = {
-                // TODO: Google login
-            },
-
-            onPhoneLogin = {
-                // TODO: Phone login
-            }
-        )
+                onPhoneLogin = {
+                    // TODO: Phone login
+                }
+            )
+        }
     }
 }

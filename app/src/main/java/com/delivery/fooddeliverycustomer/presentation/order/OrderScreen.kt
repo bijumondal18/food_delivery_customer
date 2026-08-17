@@ -1,6 +1,11 @@
 package com.delivery.fooddeliverycustomer.presentation.order
 
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,8 +33,10 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -61,6 +68,13 @@ fun OrderScreen(
         mutableIntStateOf(0)
     }
 
+    var contentVisible by remember { mutableStateOf(false) }
+    /* * Trigger the screen entrance animation only once. */
+
+    LaunchedEffect(Unit) {
+        contentVisible = true
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -74,66 +88,79 @@ fun OrderScreen(
 
     ) { paddingValues ->
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 8.dp)
-                .padding(paddingValues)
+        AnimatedVisibility(
+            visible = contentVisible,
+            enter = fadeIn(
+                animationSpec = tween(
+                    durationMillis = 350,
+                    easing = FastOutSlowInEasing
+                )
+            ) + slideInVertically(
+                initialOffsetY = { 20 },
+                animationSpec = tween(durationMillis = 350, easing = FastOutSlowInEasing)
+            )
         ) {
-
-            TabRow(
-                selectedTabIndex = selectedTab,
-                containerColor = MaterialTheme.colorScheme.background,
-                divider = {
-                    HorizontalDivider(
-                        thickness = 0.5.dp,
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(
-                            alpha = 0.5f
-                        )
-                    )
-                }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = 8.dp)
+                    .padding(paddingValues)
             ) {
 
-                Tab(
-                    selected = selectedTab == 0,
-                    onClick = {
-                        selectedTab = 0
-                    },
-                    text = {
-                        Text("Active")
+                TabRow(
+                    selectedTabIndex = selectedTab,
+                    containerColor = MaterialTheme.colorScheme.background,
+                    divider = {
+                        HorizontalDivider(
+                            thickness = 0.5.dp,
+                            color = MaterialTheme.colorScheme.outlineVariant.copy(
+                                alpha = 0.5f
+                            )
+                        )
                     }
-                )
-
-                Tab(
-                    selected = selectedTab == 1,
-                    onClick = {
-                        selectedTab = 1
-                    },
-                    text = {
-                        Text("Past Orders")
-                    }
-                )
-            }
-
-            if (orders.isEmpty()) {
-
-                EmptyOrders()
-
-            } else {
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalArrangement =
-                        Arrangement.spacedBy(12.dp)
                 ) {
 
-                    orders.forEach { order ->
+                    Tab(
+                        selected = selectedTab == 0,
+                        onClick = {
+                            selectedTab = 0
+                        },
+                        text = {
+                            Text("Active")
+                        }
+                    )
 
-                        OrderCard(
-                            order = order
-                        )
+                    Tab(
+                        selected = selectedTab == 1,
+                        onClick = {
+                            selectedTab = 1
+                        },
+                        text = {
+                            Text("Past Orders")
+                        }
+                    )
+                }
+
+                if (orders.isEmpty()) {
+
+                    EmptyOrders()
+
+                } else {
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement =
+                            Arrangement.spacedBy(12.dp)
+                    ) {
+
+                        orders.forEach { order ->
+
+                            OrderCard(
+                                order = order
+                            )
+                        }
                     }
                 }
             }
