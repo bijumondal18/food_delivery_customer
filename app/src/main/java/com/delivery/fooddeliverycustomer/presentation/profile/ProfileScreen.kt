@@ -74,16 +74,28 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.lerp
 import kotlinx.coroutines.flow.Flow
 
 private data class ProfileMenu(val icon: Int, val title: String, val subtitle: String = "")
+
+private val TOP_BAR_HEIGHT = 64.dp
+private const val COLLAPSE_DISTANCE = 180
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,218 +104,226 @@ fun ProfileScreen(
     name: String = "Biju Mondal",
     phone: String = "+91 98765 43210",
     onEditProfile: () -> Unit = {},
-    onLogout: () -> Unit = {}
+    onLogout: () -> Unit = {},
+    onBackClick: () -> Unit
 ) {
     val listState = rememberLazyListState()
-    val scrollProgress by remember {
+
+    /*
+     * This is the amount of the profile header that has been scrolled.
+     *
+     * 0f = completely expanded
+     * 1f = completely collapsed
+     */
+    val progress by remember {
         derivedStateOf {
+            val scroll = when {
+                listState.firstVisibleItemIndex > 0 -> COLLAPSE_DISTANCE
+                else -> listState.firstVisibleItemScrollOffset
+            }
 
-            val scrollOffset =
-                if (listState.firstVisibleItemIndex == 0) {
-                    listState.firstVisibleItemScrollOffset
-                } else {
-                    200
-                }
-
-            (scrollOffset / 160f)
+            (scroll / COLLAPSE_DISTANCE.toFloat())
                 .coerceIn(0f, 1f)
         }
     }
 
-    val collapsed by remember {
-        derivedStateOf {
-            scrollProgress > 0.85f
-        }
+    val isDarkTheme = isSystemInDarkTheme()
+
+    var contentVisible by remember {
+        mutableStateOf(false)
     }
-    val isDarkTheme = androidx.compose.foundation.isSystemInDarkTheme()
-    var contentVisible by remember { mutableStateOf(false) }
-    /* * Trigger the screen entrance animation only once. */
 
     LaunchedEffect(Unit) {
         contentVisible = true
     }
 
-    /* * Static menu data is remembered so that these lists * aren't recreated on every recomposition. */
     val accountItems = remember {
         listOf(
             ProfileMenu(
-                icon = R.drawable.location_on_24px,
-                title = "Saved Addresses",
-                subtitle = "Manage your delivery addresses"
+                R.drawable.location_on_24px,
+                "Saved Addresses",
+                "Manage your delivery addresses"
             ),
             ProfileMenu(
-                icon = R.drawable.notifications_24px,
-                title = "Notifications",
-                subtitle = "Manage notification preferences"
+                R.drawable.notifications_24px,
+                "Notifications",
+                "Manage notification preferences"
             ),
             ProfileMenu(
-                icon = R.drawable.settings_24px,
-                title = "Settings",
-                subtitle = "App preferences"
+                R.drawable.settings_24px,
+                "Settings",
+                "App preferences"
             ),
             ProfileMenu(
-                icon = R.drawable.help_24px,
-                title = "Help & Support",
-                subtitle = "We're here to help"
+                R.drawable.help_24px,
+                "Help & Support",
+                "We're here to help"
             )
         )
     }
+
     val feedbackItems = remember {
         listOf(
-            ProfileMenu(icon = R.drawable.help_24px, title = "Terms & Conditions"),
-            ProfileMenu(icon = R.drawable.help_24px, title = "Privacy Policy"),
             ProfileMenu(
-                icon = R.drawable.help_24px,
-                title = "Restaurant Partner Terms & Conditions"
+                R.drawable.help_24px,
+                "Terms & Conditions"
             ),
-            ProfileMenu(icon = R.drawable.help_24px, title = "TastyGo Refund Policy"),
-            ProfileMenu(icon = R.drawable.help_24px, title = "Customer Support")
+            ProfileMenu(
+                R.drawable.help_24px,
+                "Privacy Policy"
+            ),
+            ProfileMenu(
+                R.drawable.help_24px,
+                "Restaurant Partner Terms & Conditions"
+            ),
+            ProfileMenu(
+                R.drawable.help_24px,
+                "TastyGo Refund Policy"
+            ),
+            ProfileMenu(
+                R.drawable.help_24px,
+                "Customer Support"
+            )
         )
     }
-
-
-    val logoutSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true
-    )
 
     var showLogoutSheet by rememberSaveable {
         mutableStateOf(false)
     }
 
+    val logoutSheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
-    Scaffold(
-        topBar = {
-            ProfileCollapsedTopBar(
-                scrollProgress = scrollProgress,
-                profileImageUrl = profileImageUrl,
-                name = name
-            )
-        }
-    ) { paddingValues ->
-        AnimatedVisibility(
-            visible = contentVisible,
-            enter = fadeIn(
-                animationSpec = tween(
-                    durationMillis = 350,
-                    easing = FastOutSlowInEasing
-                )
-            ) + slideInVertically(
-                initialOffsetY = { 20 },
-                animationSpec = tween(durationMillis = 350, easing = FastOutSlowInEasing)
-            )
-        ) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        MaterialTheme.colorScheme.background
-                    ),
-                contentPadding = PaddingValues(
-                    bottom = paddingValues.calculateBottomPadding() + 20.dp
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+        LazyColumn(
+            state = listState,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    MaterialTheme.colorScheme.background
                 ),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
+            contentPadding = PaddingValues(
+                top = TOP_BAR_HEIGHT,
+                bottom = 24.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
 
-                item {
+            item {
 
-                    ProfileHeader(
-                        profileImageUrl = profileImageUrl,
-                        name = name,
-                        phone = phone,
-                        onEditProfile = onEditProfile,
-                        isDarkTheme = isDarkTheme
+                ProfileHeaderSpace(
+                    isDarkTheme = isDarkTheme
+                )
+            }
+
+            item {
+
+                Text(
+                    text = "Account",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(
+                        start = 20.dp,
+                        end = 20.dp,
+                        top = 12.dp,
+                        bottom = 2.dp
                     )
-                }
+                )
+            }
 
-                item {
+            item {
 
-                    Text(
-                        text = "Account",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(
-                            start = 20.dp,
-                            end = 20.dp,
-                            top = 12.dp,
-                            bottom = 2.dp
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+
+                    accountItems.forEach { item ->
+
+                        ProfileMenuItem(
+                            icon = item.icon,
+                            title = item.title,
+                            subtitle = item.subtitle,
+                            onClick = {}
                         )
-                    )
-                }
-
-                item {
-
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-
-                        accountItems.forEach { item ->
-
-                            ProfileMenuItem(
-                                icon = item.icon,
-                                title = item.title,
-                                subtitle = item.subtitle,
-                                onClick = {}
-                            )
-                        }
                     }
-                }
-
-                item {
-
-                    Text(
-                        text = "Feedback",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(
-                            start = 20.dp,
-                            end = 20.dp,
-                            top = 12.dp,
-                            bottom = 2.dp
-                        )
-                    )
-                }
-
-                item {
-
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-
-                        feedbackItems.forEach { item ->
-
-                            ProfileMenuItem(
-                                icon = item.icon,
-                                title = item.title,
-                                subtitle = item.subtitle,
-                                onClick = {}
-                            )
-                        }
-                    }
-                }
-
-                item {
-
-                    HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 4.dp),
-                        thickness = 0.5.dp
-                    )
-
-                    ProfileMenuItem(
-                        icon = R.drawable.logout_24px,
-                        title = "Logout",
-                        subtitle = "Sign out from your account",
-                        iconTint = MaterialTheme.colorScheme.primary,
-                        onClick = {
-                            showLogoutSheet = true
-                        }//onLogout
-                    )
                 }
             }
+
+            item {
+
+                Text(
+                    text = "Feedback",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(
+                        start = 20.dp,
+                        end = 20.dp,
+                        top = 12.dp,
+                        bottom = 2.dp
+                    )
+                )
+            }
+
+            item {
+
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+
+                    feedbackItems.forEach { item ->
+
+                        ProfileMenuItem(
+                            icon = item.icon,
+                            title = item.title,
+                            subtitle = item.subtitle,
+                            onClick = {}
+                        )
+                    }
+                }
+            }
+
+            item {
+
+                HorizontalDivider(
+                    modifier = Modifier.padding(
+                        vertical = 4.dp
+                    ),
+                    thickness = 0.5.dp
+                )
+
+                ProfileMenuItem(
+                    icon = R.drawable.logout_24px,
+                    title = "Logout",
+                    subtitle = "Sign out from your account",
+                    iconTint = MaterialTheme.colorScheme.primary,
+                    onClick = {
+                        showLogoutSheet = true
+                    }
+                )
+            }
         }
+
+        ProfileTopBar(
+            onBackClick = onBackClick,
+            progress = progress
+        )
+
+        ProfileAnimatedHeader(
+            profileImageUrl = profileImageUrl,
+            name = name,
+            phone = phone,
+            progress = progress,
+            onEditProfile = onEditProfile,
+            isDarkTheme = isDarkTheme
+        )
     }
 
     if (showLogoutSheet) {
+
         ModalBottomSheet(
             dragHandle = {},
             onDismissRequest = {
@@ -313,139 +333,22 @@ fun ProfileScreen(
             sheetState = logoutSheetState,
             containerColor = MaterialTheme.colorScheme.surface
         ) {
+
             LogoutConfirmationSheet(
+
                 onCancel = {
                     showLogoutSheet = false
                 },
+
                 onLogout = {
                     showLogoutSheet = false
-
-                    // Perform logout here
-                    // viewModel.logout()
+                    onLogout()
                 }
             )
         }
     }
-
 }
 
-
-/* * ============================================================ * PROFILE HEADER * ============================================================ */
-
-@Composable
-private fun ProfileHeader(
-    profileImageUrl: String?,
-    name: String,
-    phone: String,
-    onEditProfile: () -> Unit,
-    isDarkTheme: Boolean
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                brush = if (isDarkTheme) {
-                    AppDarkGradient
-                } else {
-                    AppLightGradient
-                }
-            )
-            .statusBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 28.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            // Profile Avatar
-            Box(
-                modifier = Modifier.size(92.dp)
-            ) {
-                // Profile avatar
-                if (!profileImageUrl.isNullOrEmpty()) {
-                    AsyncImage(
-                        model = profileImageUrl,
-                        contentDescription = "Profile",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(92.dp)
-                            .clip(CircleShape)
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .size(92.dp)
-                            .clip(CircleShape)
-                            .background(
-                                MaterialTheme.colorScheme.primary
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(
-                                R.drawable.person_3_24px
-                            ),
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(44.dp)
-                        )
-                    }
-                }
-
-                // Small edit button
-                Box(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .align(Alignment.BottomEnd)
-                        .clip(CircleShape)
-                        .background(
-                            MaterialTheme.colorScheme.secondary
-                        )
-                        .border(
-                            width = 1.5.dp,
-                            color = MaterialTheme.colorScheme.background,
-                            shape = CircleShape
-                        )
-                        .clickable(onClick = onEditProfile),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            R.drawable.edit_24px
-                        ),
-                        contentDescription = "Edit profile",
-                        tint = Color.Black,
-                        modifier = Modifier.size(14.dp)
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.width(18.dp))
-
-            // Name + Phone
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = name,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = phone,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-    }
-}
 
 /* * ============================================================ * PROFILE MENU ITEM * ============================================================ */
 
@@ -518,61 +421,6 @@ private fun ProfileMenuItem(
 }
 
 
-/* * ============================================================ * PROFILE COLLAPSED TOOLBAR * ============================================================ */
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ProfileCollapsedTopBar(
-    scrollProgress: Float,
-    profileImageUrl: String?,
-    name: String
-) {
-
-    val alpha by animateFloatAsState(
-        targetValue = scrollProgress,
-        animationSpec = tween(
-            durationMillis = 200,
-            easing = FastOutSlowInEasing
-        ),
-        label = "appBarAlpha"
-    )
-
-    Surface(
-        modifier = Modifier.alpha(alpha),
-        tonalElevation = 1.dp,
-        shadowElevation = 1.dp,
-        color = MaterialTheme.colorScheme.background
-    ) {
-
-        TopAppBar(
-            title = {
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    ProfileAvatar(
-                        profileImageUrl = profileImageUrl,
-                        size = 36.dp
-                    )
-
-                    Spacer(
-                        modifier = Modifier.width(10.dp)
-                    )
-
-                    Text(
-                        text = name,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        maxLines = 1
-                    )
-                }
-            }
-        )
-    }
-}
-
 @Composable
 private fun ProfileAvatar(
     profileImageUrl: String?,
@@ -618,5 +466,234 @@ private fun ProfileAvatar(
                 )
             }
         }
+    }
+}
+
+
+@Composable
+private fun ProfileHeaderSpace(
+    isDarkTheme: Boolean
+) {
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp)
+    )
+}
+
+@Composable
+private fun ProfileAnimatedHeader(
+    profileImageUrl: String?,
+    name: String,
+    phone: String,
+    progress: Float,
+    onEditProfile: () -> Unit,
+    isDarkTheme: Boolean
+) {
+
+
+    val avatarSize = lerp(
+        92.dp,
+        38.dp,
+        progress
+    )
+
+
+    val avatarX = lerp(
+        16.dp,
+        56.dp,
+        progress
+    )
+
+    val avatarY = lerp(
+        70.dp,
+        9.dp,
+        progress
+    )
+
+
+    val nameX = lerp(
+        126.dp,
+        104.dp,
+        progress
+    )
+
+    val nameY = lerp(
+        86.dp,
+        17.dp,
+        progress
+    )
+
+    val nameSize = lerp(
+        22.sp,
+        17.sp,
+        progress
+    )
+
+    val phoneAlpha = 1f - (progress * 2f).coerceIn(0f, 1f)
+
+
+    val editSize = lerp(
+        32.dp,
+        16.dp,
+        progress
+    )
+
+    val editX = lerp(
+        76.dp,
+        42.dp,
+        progress
+    )
+
+    val editY = lerp(
+        130.dp,
+        34.dp,
+        progress
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
+
+        ProfileAvatar(
+            profileImageUrl = profileImageUrl,
+            size = avatarSize,
+            modifier = Modifier
+                .graphicsLayer {
+                    translationX = avatarX.toPx()
+                    translationY = avatarY.toPx()
+                }
+        )
+
+        Box(
+            modifier = Modifier
+                .size(editSize)
+                .graphicsLayer {
+                    translationX = editX.toPx()
+                    translationY = editY.toPx()
+                    alpha = 1f - progress
+                }
+                .clip(CircleShape)
+                .background(
+                    MaterialTheme.colorScheme.secondary
+                )
+                .border(
+                    width = 1.5.dp,
+                    color = MaterialTheme.colorScheme.background,
+                    shape = CircleShape
+                )
+                .clickable(
+                    onClick = onEditProfile
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+
+            Icon(
+                painter = painterResource(
+                    R.drawable.edit_24px
+                ),
+                contentDescription = "Edit profile",
+                tint = Color.Black,
+                modifier = Modifier.size(
+                    editSize * 0.45f
+                )
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .graphicsLayer {
+                    translationX = nameX.toPx()
+                    translationY = nameY.toPx()
+                }
+        ) {
+
+            Text(
+                text = name,
+                fontSize = nameSize,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
+            )
+
+            Spacer(
+                modifier = Modifier.height(5.dp)
+            )
+
+            Text(
+                text = phone,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.graphicsLayer {
+                    alpha = phoneAlpha
+                },
+                maxLines = 1
+            )
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ProfileTopBar(
+    onBackClick: () -> Unit,
+    progress: Float
+) {
+
+    val density = LocalDensity.current
+
+    val statusBarHeight = with(density) {
+        WindowInsets.statusBars.getTop(this).toDp()
+    }
+
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(TOP_BAR_HEIGHT + statusBarHeight),
+        color = MaterialTheme.colorScheme.background.copy(
+            alpha = progress.coerceIn(0f, 1f)
+        ),
+        tonalElevation = lerp(0.dp, 2.dp, progress),
+        shadowElevation = lerp(0.dp, 0.5.dp, progress)
+    ) {
+
+        TopAppBar(
+
+            navigationIcon = {
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    IconButton(
+                        onClick = onBackClick,
+                        modifier = Modifier
+                            .statusBarsPadding()
+                            .offset(y = (-3).dp)
+                            .align(Alignment.CenterStart)
+                    ) {
+
+                        Icon(
+                            imageVector =
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
+            },
+
+            title = {
+                // Empty intentionally.
+            },
+
+            colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent
+            ),
+
+            modifier = Modifier.statusBarsPadding()
+        )
     }
 }

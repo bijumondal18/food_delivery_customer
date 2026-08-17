@@ -37,7 +37,7 @@ import com.delivery.fooddeliverycustomer.R
 fun HomeLocationHeader(
     location: String,
     onLocationClick: () -> Unit,
-    onNotificationClick: () -> Unit
+    onProfileClick: () -> Unit
 ) {
 
     val interactionSource = remember {
@@ -133,7 +133,7 @@ fun HomeLocationHeader(
             }
 
             IconButton(
-                onClick = onNotificationClick
+                onClick = onProfileClick
             ) {
 
                 Box(

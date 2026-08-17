@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -185,7 +186,8 @@ fun MainScreen() {
                     onNavigateToSearch = {
                         // TODO:
                         // Add search navigation
-                    }
+                    },
+                    onNavigateToProfile = {}
                 )
             }
 
@@ -204,7 +206,11 @@ fun MainScreen() {
             composable(
                 BottomNavRoute.Profile.route
             ) {
-                ProfileScreen()
+                ProfileScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
             }
         }
     }

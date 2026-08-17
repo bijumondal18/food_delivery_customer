@@ -71,10 +71,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
 import com.delivery.fooddeliverycustomer.core.components.FoodCategoryItem
 import com.delivery.fooddeliverycustomer.core.components.LocationBottomSheet
+import com.delivery.fooddeliverycustomer.core.navigation.NavRoutes
 import com.delivery.fooddeliverycustomer.data.model.FoodCategory
 
 
@@ -117,11 +119,13 @@ private val foodCategories = listOf(
 fun HomeScreen(
     state: HomeUiState,
     viewModel: HomeViewModel,
-    onNavigateToSearch: () -> Unit
+    onNavigateToSearch: () -> Unit,
+    onNavigateToProfile: () -> Unit,
 ) {
 
     val listState = rememberLazyListState()
 
+    val navController = rememberNavController()
     var showLocationSheet by remember {
         mutableStateOf(false)
     }
@@ -183,9 +187,8 @@ fun HomeScreen(
                         showLocationSheet = true
                     },
 
-                    onNotificationClick = {
-                        // TODO: Open notifications
-                    }
+                    onProfileClick = onNavigateToProfile
+
                 )
             }
 
