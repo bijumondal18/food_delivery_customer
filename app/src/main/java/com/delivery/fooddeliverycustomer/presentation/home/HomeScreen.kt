@@ -1,6 +1,7 @@
 package com.delivery.fooddeliverycustomer.presentation.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -31,20 +32,29 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,6 +64,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
@@ -97,231 +108,198 @@ private val foodCategories = listOf(
     )
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    showLoginSheet: Boolean,
-    onDismissLoginSheet: () -> Unit,
-    onGoogleLogin: () -> Unit,
-    onPhoneLogin: () -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
+    state: HomeUiState,
+    viewModel: HomeViewModel,
+    onNavigateToSearch: () -> Unit
 ) {
 
-    val state by viewModel.uiState.collectAsState()
+    val listState = rememberLazyListState()
 
     var showLocationSheet by remember {
         mutableStateOf(false)
     }
 
+    var showLoginSheet by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(Unit) {
         viewModel.loadLocation()
     }
 
-    Scaffold() { paddingValues ->
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .padding(
-                    bottom = paddingValues.calculateBottomPadding()
-                )
-        ) {
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = {
+            3
+        }
+    )
 
-            // Compact App Bar
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp),
-                verticalAlignment = Alignment.CenterVertically
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        state = listState
+    ) {
+
+        // --------------------------------------------------
+        // Location + Notification Header
+        // This scrolls away
+        // --------------------------------------------------
+
+        item {
+
+            HomeLocationHeader(
+                location = state.location?.address
+                    ?: "Fetching location...",
+
+                onLocationClick = {
+                    showLocationSheet = true
+                },
+
+                onNotificationClick = {
+                    // TODO: Open notifications
+                }
+            )
+        }
+
+        // --------------------------------------------------
+        // Search Bar
+        // This remains pinned
+        // --------------------------------------------------
+
+        stickyHeader {
+
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.background,
+                shadowElevation = if (
+                    listState.firstVisibleItemIndex > 0
+                ) {
+                    4.dp
+                } else {
+                    0.dp
+                }
             ) {
 
-                // Location
-
-                Icon(
-                    modifier = Modifier.padding(start = 8.dp, end = 4.dp),
-                    painter = painterResource(
-                        R.drawable.location_on_24px
-                    ),
-                    contentDescription = "Location",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-
-
-                // Location Text
-                Column(
+                Row(
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = 16.dp,
+                            vertical = 10.dp
+                        )
+                        .clip(
+                            RoundedCornerShape(12.dp)
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.outline,
+                            shape = RoundedCornerShape(12.dp)
+                        )
                         .clickable {
-                            showLocationSheet = true
+                            // Navigate to Search Screen
+                            onNavigateToSearch()
                         }
+                        .padding(
+                            horizontal = 16.dp,
+                            vertical = 13.dp
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(22.dp)
+                    )
+
+                    Spacer(
+                        modifier = Modifier.width(10.dp)
+                    )
 
                     Text(
-                        text = state.location?.address
-                            ?: "Fetching location...",
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        maxLines = 1
+                        text = "Search food, restaurants...",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-
-                // Notification
-                IconButton(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    onClick = {
-                        // TODO: Navigate to notification screen
-                    }
-                ) {
-
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .clip(CircleShape)
-                            .background(
-                                MaterialTheme.colorScheme.primary.copy(
-                                    alpha = 0.10f
-                                )
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-
-                        Icon(
-                            painter = painterResource(
-                                R.drawable.notifications_24px
-                            ),
-                            contentDescription = "Notification",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(22.dp)
-                        )
-                    }
-                }
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-
-                // Search bar
-                OutlinedTextField(
-                    value = "",
-                    onValueChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp)
-                        .height(56.dp),
-                    placeholder = {
-                        Text("Search food, restaurants...")
-                    },
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(
-                                R.drawable.search_24px
-                            ),
-                            contentDescription = "Search"
-                        )
-                    },
-                    singleLine = true,
-                    shape = RoundedCornerShape(16.dp)
-                )
-
-                Spacer(
-                    modifier = Modifier.height(24.dp)
-                )
-
-                // Categories title
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp),
-                    text = "Categories",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(
-                    modifier = Modifier.height(12.dp)
-                )
-
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    contentPadding = PaddingValues(horizontal = 4.dp)
-                ) {
-                    items(
-                        items = foodCategories,
-                        key = { it.name }
-                    ) { category ->
-                        FoodCategoryItem(
-                            category = category,
-                            onClick = {
-                                // TODO: Handle category click
-                            }
-                        )
-                    }
-                }
-
-                Spacer(
-                    modifier = Modifier.height(12.dp)
-                )
-
-                // Top Rated Food title
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp),
-                    text = "Top Rated Food",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(
-                    modifier = Modifier.height(12.dp)
-                )
             }
         }
 
+
+        // --------------------------------------------------
+        // Banner
+        // --------------------------------------------------
+
+        item {
+            HomeBannerPager(
+                pagerState = pagerState
+            )
+        }
+
+        // --------------------------------------------------
+        // Categories
+        // --------------------------------------------------
+
+        item {
+
+//            CategoriesSection()
+        }
+
+        // --------------------------------------------------
+        // Popular Restaurants
+        // --------------------------------------------------
+
+        item {
+
+//            PopularRestaurantsSection()
+        }
+
+        // --------------------------------------------------
+        // Offers
+        // --------------------------------------------------
+
+        item {
+
+//            OffersSection()
+        }
+
+        // Add more sections here...
     }
 
-    if (showLoginSheet) {
-
-        LoginBottomSheet(
-
-            onDismiss = {
-                onDismissLoginSheet()
-            },
-
-            onGoogleLogin = {
-                onGoogleLogin()
-            },
-
-            onPhoneLogin = {
-                onPhoneLogin()
-            }
-        )
-    }
+    // ======================================================
+    // Location Bottom Sheet
+    // IMPORTANT: Outside LazyColumn
+    // ======================================================
 
     if (showLocationSheet) {
 
         LocationBottomSheet(
             currentLocation = state.location?.address,
+
             onDismiss = {
                 showLocationSheet = false
             },
+
             onUseCurrentLocation = {
+
                 showLocationSheet = false
+
                 viewModel.loadLocation()
             },
+
             onAddNewAddress = {
+
                 showLocationSheet = false
 
                 // TODO:
                 // Navigate to Add Address screen
             },
+
             onLocationSelected = { location ->
+
                 showLocationSheet = false
 
                 // TODO:
@@ -330,4 +308,26 @@ fun HomeScreen(
         )
     }
 
+    // ======================================================
+    // Login Bottom Sheet
+    // IMPORTANT: Outside LazyColumn
+    // ======================================================
+
+    if (showLoginSheet) {
+
+        LoginBottomSheet(
+
+            onDismiss = {
+                showLoginSheet = false
+            },
+
+            onGoogleLogin = {
+                // TODO: Google login
+            },
+
+            onPhoneLogin = {
+                // TODO: Phone login
+            }
+        )
+    }
 }

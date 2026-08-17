@@ -1,12 +1,15 @@
 package com.delivery.fooddeliverycustomer.core.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -33,6 +36,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.delivery.fooddeliverycustomer.R
@@ -84,7 +88,7 @@ fun LocationBottomSheet(
 ) {
 
     ModalBottomSheet(
-        onDismissRequest = {onDismiss()},
+        onDismissRequest = { onDismiss() },
         dragHandle = {},
         sheetState = rememberModalBottomSheetState(
             skipPartiallyExpanded = true
@@ -101,7 +105,7 @@ fun LocationBottomSheet(
                 .fillMaxWidth()
                 .navigationBarsPadding()
                 .padding(
-                    horizontal = 24.dp,
+                    horizontal = 16.dp,
                     vertical = 12.dp
                 )
         ) {
@@ -111,8 +115,8 @@ fun LocationBottomSheet(
 
                 Row {
                     Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(1.dp)
                     ) {
                         Text(
                             text = "Select Location",
@@ -124,7 +128,7 @@ fun LocationBottomSheet(
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(
-                                top = 4.dp,
+                                top = 2.dp,
                                 bottom = 4.dp
                             )
                         )
@@ -133,144 +137,155 @@ fun LocationBottomSheet(
                     IconButton(
                         onClick = onDismiss
                     ) {
-                        Icon(
-                            painter = painterResource(R.drawable.close_24px),
-                            contentDescription = "Close Icon"
-                        )
-                    }
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.close_24px),
+                                contentDescription = "Close Icon"
+                            )
+                        }
 
                 }
 
-
             }
 
-            // Divider
-            item {
 
-                HorizontalDivider(
-                    modifier = Modifier.padding(
-                        vertical = 12.dp
-                    )
+        }
+
+        // Divider
+        item {
+
+            HorizontalDivider(
+                modifier = Modifier.padding(
+                    vertical = 12.dp
                 )
-            }
+            )
+        }
 
-            // Popular locations
-            item {
+        // Popular locations
+        item {
+
+            Text(
+                text = "Popular locations",
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 12.dp,
+                        bottom = 20.dp
+                    ),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+
+                items(popularLocations) { location ->
+
+                    FilterChip(
+                        selected = false,
+                        shape = CircleShape,
+                        onClick = {
+                            onLocationSelected(location)
+                        },
+                        label = {
+                            Text(location)
+                        }
+                    )
+                }
+            }
+        }
+
+        // Current location
+        item {
+
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onUseCurrentLocation
+            ) {
+
+                Icon(
+                    painter = painterResource(R.drawable.my_location_24px),
+                    contentDescription = null
+                )
 
                 Text(
-                    text = "Popular locations",
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 12.dp,
-                            bottom = 20.dp
-                        ),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-
-                    items(popularLocations) { location ->
-
-                        FilterChip(
-                            selected = false,
-                            shape = CircleShape,
-                            onClick = {
-                                onLocationSelected(location)
-                            },
-                            label = {
-                                Text(location)
-                            }
-                        )
-                    }
-                }
-            }
-
-            // Current location
-            item {
-
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = onUseCurrentLocation
-                ) {
-
-                    Icon(
-                        painter = painterResource(R.drawable.my_location_24px),
-                        contentDescription = null
-                    )
-
-                    Text(
-                        text = "Use Current Location",
-                        modifier = Modifier.padding(
-                            start = 8.dp
-                        )
-                    )
-                }
-            }
-
-            // Add address
-            item {
-
-                TextButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 4.dp
-                        ),
-                    onClick = onAddNewAddress
-                ) {
-
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = null
-                    )
-
-                    Text(
-                        text = "Add New Address",
-                        modifier = Modifier.padding(
-                            start = 8.dp
-                        )
-                    )
-                }
-            }
-
-            // Divider
-            item {
-
-                HorizontalDivider(
+                    text = "Use Current Location",
                     modifier = Modifier.padding(
-                        vertical = 12.dp
+                        start = 8.dp
                     )
-                )
-            }
-
-            // Saved addresses title
-            item {
-
-                Text(
-                    text = "Saved Addresses",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(
-                        bottom = 8.dp
-                    )
-                )
-            }
-
-            // Saved addresses
-            items(
-                items = savedAddresses,
-                key = { it.id }
-            ) { address ->
-
-                SavedAddressItem(
-                    address = address,
-                    onClick = {
-                        onLocationSelected(address.address)
-                    }
                 )
             }
         }
+
+        // Add address
+        item {
+
+            TextButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 4.dp
+                    ),
+                onClick = onAddNewAddress
+            ) {
+
+                Icon(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = null
+                )
+
+                Text(
+                    text = "Add New Address",
+                    modifier = Modifier.padding(
+                        start = 8.dp
+                    )
+                )
+            }
+        }
+
+        // Divider
+        item {
+
+            HorizontalDivider(
+                modifier = Modifier.padding(
+                    vertical = 12.dp
+                )
+            )
+        }
+
+        // Saved addresses title
+        item {
+
+            Text(
+                text = "Saved Addresses",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(
+                    bottom = 8.dp
+                )
+            )
+        }
+
+        // Saved addresses
+        items(
+            items = savedAddresses,
+            key = { it.id }
+        ) { address ->
+
+            SavedAddressItem(
+                address = address,
+                onClick = {
+                    onLocationSelected(address.address)
+                }
+            )
+        }
     }
+}
 }

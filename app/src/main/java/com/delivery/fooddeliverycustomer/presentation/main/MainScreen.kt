@@ -12,9 +12,11 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -24,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.delivery.fooddeliverycustomer.R
 import com.delivery.fooddeliverycustomer.presentation.cart.CartScreen
 import com.delivery.fooddeliverycustomer.presentation.home.HomeScreen
+import com.delivery.fooddeliverycustomer.presentation.home.HomeViewModel
 import com.delivery.fooddeliverycustomer.presentation.order.OrderScreen
 import com.delivery.fooddeliverycustomer.presentation.profile.ProfileScreen
 
@@ -134,7 +137,7 @@ fun MainScreen() {
 
                             Icon(
                                 painter = painterResource(
-                                    id = if(selected) item.selectedIcon else item.icon
+                                    id = if (selected) item.selectedIcon else item.icon
                                 ),
                                 contentDescription = item.title,
 
@@ -166,14 +169,23 @@ fun MainScreen() {
             modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
         ) {
 
+
             composable(
                 BottomNavRoute.Home.route
             ) {
+
+                val viewModel: HomeViewModel =
+                    hiltViewModel()
+
+                val state by viewModel.uiState.collectAsState()
+
                 HomeScreen(
-                    showLoginSheet = false,
-                    onDismissLoginSheet = {},
-                    onGoogleLogin = {},
-                    onPhoneLogin = {},
+                    state = state,
+                    viewModel = viewModel,
+                    onNavigateToSearch = {
+                        // TODO:
+                        // Add search navigation
+                    }
                 )
             }
 
