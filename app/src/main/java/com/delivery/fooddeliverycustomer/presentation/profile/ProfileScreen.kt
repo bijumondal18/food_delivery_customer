@@ -286,7 +286,7 @@ fun ProfileScreen(
             onDismissRequest = {
                 showLogoutSheet = false
             },
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(16.dp),
             sheetState = logoutSheetState,
             containerColor = MaterialTheme.colorScheme.surface
         ) {

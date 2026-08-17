@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -33,6 +34,8 @@ import com.delivery.fooddeliverycustomer.core.ui.theme.AppDarkGradient
 import com.delivery.fooddeliverycustomer.core.ui.theme.AppLightGradient
 import com.delivery.fooddeliverycustomer.core.ui.theme.Quicksand
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun SplashScreen(
@@ -41,16 +44,12 @@ fun SplashScreen(
 
     val context = LocalContext.current
 
-    val locationManager = remember {
-        LocationManager(context)
-    }
-
     val alpha = remember {
         Animatable(0f)
     }
 
     val scale = remember {
-        Animatable(0.85f)
+        Animatable(0.65f)
     }
 
     var splashFinished by remember {
@@ -66,27 +65,29 @@ fun SplashScreen(
     }
 
     // --------------------------------------------------
-    // Notification Permission Launcher
-    // --------------------------------------------------
-
-    val notificationPermissionLauncher =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.RequestPermission()
-        ) {
-            // Whether accepted OR denied, continue.
-            notificationPermissionCompleted = true
-        }
-
-    // --------------------------------------------------
-    // Location Permission Launcher
+    // Location Permission
     // --------------------------------------------------
 
     val locationPermissionLauncher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestMultiplePermissions()
         ) {
-            // Whether accepted OR denied, continue.
+            // Whether allowed or denied,
+            // continue to notification permission.
             locationPermissionCompleted = true
+        }
+
+    // --------------------------------------------------
+    // Notification Permission
+    // --------------------------------------------------
+
+    val notificationPermissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission()
+        ) {
+            // Whether allowed or denied,
+            // continue to Home.
+            notificationPermissionCompleted = true
         }
 
     // --------------------------------------------------
@@ -95,34 +96,44 @@ fun SplashScreen(
 
     LaunchedEffect(Unit) {
 
-        alpha.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(
-                durationMillis = 500,
-                easing = FastOutSlowInEasing
-            )
-        )
+        kotlinx.coroutines.coroutineScope {
 
-        scale.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(
-                durationMillis = 500,
-                easing = FastOutSlowInEasing
-            )
-        )
+            launch {
+                alpha.animateTo(
+                    targetValue = 1f,
+                    animationSpec = tween(
+                        durationMillis = 450,
+                        easing = FastOutSlowInEasing
+                    )
+                )
+            }
 
-        delay(500)
+            launch {
+                scale.animateTo(
+                    targetValue = 1f,
+                    animationSpec = tween(
+                        durationMillis = 450,
+                        easing = FastOutSlowInEasing
+                    )
+                )
+            }
+        }
+
+        delay(150)
 
         splashFinished = true
     }
 
     // --------------------------------------------------
-    // STEP 1: Location Permission
+    // STEP 1
+    // Check Location Permission
     // --------------------------------------------------
 
     LaunchedEffect(splashFinished) {
 
-        if (!splashFinished) return@LaunchedEffect
+        if (!splashFinished) {
+            return@LaunchedEffect
+        }
 
         val fineGranted =
             ContextCompat.checkSelfPermission(
@@ -138,13 +149,12 @@ fun SplashScreen(
 
         if (fineGranted || coarseGranted) {
 
-            // Already granted.
-            // Do NOT ask again.
+            // Already granted
             locationPermissionCompleted = true
 
         } else {
 
-            // Ask only once.
+            // Ask location permission
             locationPermissionLauncher.launch(
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
@@ -155,7 +165,8 @@ fun SplashScreen(
     }
 
     // --------------------------------------------------
-    // STEP 2: Fetch Location + Notification Permission
+    // STEP 2
+    // Notification Permission
     // --------------------------------------------------
 
     LaunchedEffect(locationPermissionCompleted) {
@@ -163,45 +174,6 @@ fun SplashScreen(
         if (!locationPermissionCompleted) {
             return@LaunchedEffect
         }
-
-        // ----------------------------------------------
-        // Fetch current location
-        // ----------------------------------------------
-
-        val fineGranted =
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-
-        val coarseGranted =
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-
-        if (fineGranted || coarseGranted) {
-
-            val location =
-                locationManager.getCurrentLocation()
-
-            if (location != null) {
-
-                val latitude = location.latitude
-                val longitude = location.longitude
-
-                println("TastyGo Location")
-                println("Latitude: $latitude")
-                println("Longitude: $longitude")
-
-                // TODO:
-                // Save location in DataStore/ViewModel
-            }
-        }
-
-        // ----------------------------------------------
-        // Notification Permission
-        // ----------------------------------------------
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
@@ -213,8 +185,6 @@ fun SplashScreen(
 
             if (notificationGranted) {
 
-                // Already granted.
-                // Do NOT ask again.
                 notificationPermissionCompleted = true
 
             } else {
@@ -226,13 +196,13 @@ fun SplashScreen(
 
         } else {
 
-            // Android 12 and below.
             notificationPermissionCompleted = true
         }
     }
 
     // --------------------------------------------------
-    // STEP 3: Navigate to Login
+    // STEP 3
+    // Navigate Home
     // --------------------------------------------------
 
     LaunchedEffect(notificationPermissionCompleted) {
@@ -240,8 +210,6 @@ fun SplashScreen(
         if (!notificationPermissionCompleted) {
             return@LaunchedEffect
         }
-
-        delay(300)
 
         onNavigateToMain()
     }
@@ -254,11 +222,7 @@ fun SplashScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                brush = if (isSystemInDarkTheme()) {
-                    AppDarkGradient
-                } else {
-                    AppLightGradient
-                }
+                MaterialTheme.colorScheme.primary
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -268,37 +232,10 @@ fun SplashScreen(
             modifier = Modifier
                 .alpha(alpha.value)
                 .scale(scale.value),
-            color = MaterialTheme.colorScheme.primary,
-            fontSize = 42.sp,
+            color = Color.White,
+            fontSize = 52.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = Quicksand
         )
-    }
-}
-
-
-private fun requestNotificationPermission(
-    context: android.content.Context,
-    launcher: androidx.activity.result.ActivityResultLauncher<String>
-) {
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-
-        val granted =
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-
-        if (granted) {
-            return
-        }
-
-        launcher.launch(
-            Manifest.permission.POST_NOTIFICATIONS
-        )
-
-    } else {
-        // Android 12 and below don't require runtime notification permission.
     }
 }

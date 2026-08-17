@@ -42,9 +42,13 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -54,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
 import com.delivery.fooddeliverycustomer.core.components.FoodCategoryItem
+import com.delivery.fooddeliverycustomer.core.components.LocationBottomSheet
 import com.delivery.fooddeliverycustomer.data.model.FoodCategory
 
 
@@ -104,6 +109,11 @@ fun HomeScreen(
 
     val state by viewModel.uiState.collectAsState()
 
+    var showLocationSheet by remember {
+        mutableStateOf(false)
+    }
+
+
     LaunchedEffect(Unit) {
         viewModel.loadLocation()
     }
@@ -139,8 +149,13 @@ fun HomeScreen(
                 )
 
 
+                // Location Text
                 Column(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable {
+                            showLocationSheet = true
+                        }
                 ) {
 
                     Text(
@@ -288,4 +303,31 @@ fun HomeScreen(
             }
         )
     }
+
+    if (showLocationSheet) {
+
+        LocationBottomSheet(
+            currentLocation = state.location?.address,
+            onDismiss = {
+                showLocationSheet = false
+            },
+            onUseCurrentLocation = {
+                showLocationSheet = false
+                viewModel.loadLocation()
+            },
+            onAddNewAddress = {
+                showLocationSheet = false
+
+                // TODO:
+                // Navigate to Add Address screen
+            },
+            onLocationSelected = { location ->
+                showLocationSheet = false
+
+                // TODO:
+                // Save/select location
+            }
+        )
+    }
+
 }

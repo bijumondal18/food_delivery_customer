@@ -9,6 +9,7 @@ import com.delivery.fooddeliverycustomer.data.model.UserLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,38 +27,24 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            _uiState.value =
-                _uiState.value.copy(
-                    isLoadingLocation = true
-                )
-
-            val location =
-                locationManager.getCurrentLocation()
+            val location = locationManager.getCurrentLocation()
 
             if (location != null) {
 
-                val address =
-                    locationManager.getAddress(
-                        latitude = location.latitude,
-                        longitude = location.longitude
-                    )
+                val address = locationManager.getAddress(
+                    location.latitude,
+                    location.longitude
+                )
 
-                _uiState.value =
-                    HomeUiState(
+                _uiState.update {
+                    it.copy(
                         location = UserLocation(
                             latitude = location.latitude,
                             longitude = location.longitude,
                             address = address
-                        ),
-                        isLoadingLocation = false
+                        )
                     )
-
-            } else {
-
-                _uiState.value =
-                    HomeUiState(
-                        isLoadingLocation = false
-                    )
+                }
             }
         }
     }
