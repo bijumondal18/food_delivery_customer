@@ -8,9 +8,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.delivery.fooddeliverycustomer.presentation.cart.CartScreen
 import com.delivery.fooddeliverycustomer.presentation.home.HomeScreen
 import com.delivery.fooddeliverycustomer.presentation.home.HomeViewModel
 import com.delivery.fooddeliverycustomer.presentation.main.MainScreen
+import com.delivery.fooddeliverycustomer.presentation.order.OrderScreen
 import com.delivery.fooddeliverycustomer.presentation.profile.ProfileScreen
 import com.delivery.fooddeliverycustomer.presentation.splash.SplashScreen
 
@@ -80,7 +82,47 @@ fun AppNavigation() {
             ProfileScreen(
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
+                onOrdersClick = {
+                    navController.navigate(NavRoutes.Orders.route)
+                },
+                onCartClick = {
+                    navController.navigate(NavRoutes.Cart.route)
+                },
+                onWishlistClick = {}
+            )
+        }
+
+        // -----------------------------------------
+        // Cart
+        // -----------------------------------------
+        composable(
+            route = NavRoutes.Cart.route
+        ) {
+            CartScreen (
+
+            )
+        }
+
+        // -----------------------------------------
+        // Wishlist
+        // -----------------------------------------
+        composable(
+            route = NavRoutes.Wishlist.route
+        ) {
+            CartScreen (
+
+            )
+        }
+
+        // -----------------------------------------
+        // Orders
+        // -----------------------------------------
+        composable(
+            route = NavRoutes.Orders.route
+        ) {
+            OrderScreen (
+
             )
         }
 

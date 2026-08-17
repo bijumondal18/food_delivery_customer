@@ -209,7 +209,10 @@ fun MainScreen() {
                 ProfileScreen(
                     onBackClick = {
                         navController.popBackStack()
-                    }
+                    },
+                    onWishlistClick = {},
+                    onCartClick = {},
+                    onOrdersClick = {}
                 )
             }
         }

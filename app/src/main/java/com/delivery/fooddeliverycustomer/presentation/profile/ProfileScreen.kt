@@ -73,6 +73,7 @@ import kotlin.time.Duration.Companion.milliseconds
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -94,6 +95,12 @@ import kotlinx.coroutines.flow.Flow
 
 private data class ProfileMenu(val icon: Int, val title: String, val subtitle: String = "")
 
+private data class ProfileQuickAction(
+    val icon: Int,
+    val title: String,
+    val description: String
+)
+
 private val TOP_BAR_HEIGHT = 64.dp
 private const val COLLAPSE_DISTANCE = 180
 
@@ -105,7 +112,10 @@ fun ProfileScreen(
     phone: String = "+91 98765 43210",
     onEditProfile: () -> Unit = {},
     onLogout: () -> Unit = {},
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onOrdersClick: () -> Unit,
+    onCartClick: () -> Unit,
+    onWishlistClick: () -> Unit,
 ) {
     val listState = rememberLazyListState()
 
@@ -187,6 +197,27 @@ fun ProfileScreen(
         )
     }
 
+    val quickActions = remember {
+        listOf(
+            ProfileQuickAction(
+                icon = R.drawable.shopping_bag_24px,
+                title = "My Orders",
+                description = "Track your orders"
+            ),
+            ProfileQuickAction(
+                icon = R.drawable.favorite_24px,
+                title = "Wishlist",
+                description = "Your saved items"
+            ),
+            ProfileQuickAction(
+                icon = R.drawable.shopping_cart_24px,
+                title = "My Cart",
+                description = "Items in your cart"
+            )
+        )
+    }
+
+
     var showLogoutSheet by rememberSaveable {
         mutableStateOf(false)
     }
@@ -220,6 +251,18 @@ fun ProfileScreen(
                 )
             }
 
+
+            item {
+
+                ProfileQuickActions(
+                    items = quickActions,
+                    onOrdersClick = onOrdersClick,
+                    onWishlistClick = onWishlistClick,
+                    onCartClick = onCartClick
+                )
+            }
+
+
             item {
 
                 Text(
@@ -237,19 +280,19 @@ fun ProfileScreen(
 
             item {
 
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
 
-                    accountItems.forEach { item ->
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        accountItems.forEach { item ->
+                            ProfileMenuItem(
+                                icon = item.icon,
+                                title = item.title,
+                                subtitle = item.subtitle,
+                                onClick = {}
+                            )
+                        }
 
-                        ProfileMenuItem(
-                            icon = item.icon,
-                            title = item.title,
-                            subtitle = item.subtitle,
-                            onClick = {}
-                        )
-                    }
                 }
             }
 
@@ -370,7 +413,7 @@ private fun ProfileMenuItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 16.dp),
+                .padding(vertical = 12.dp, horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             /* * Icon container */
@@ -695,5 +738,124 @@ private fun ProfileTopBar(
 
             modifier = Modifier.statusBarsPadding()
         )
+    }
+}
+
+
+@Composable
+private fun ProfileQuickActions(
+    items: List<ProfileQuickAction>,
+    onOrdersClick: () -> Unit,
+    onWishlistClick: () -> Unit,
+    onCartClick: () -> Unit
+) {
+
+    val clickActions = listOf(
+        onOrdersClick,
+        onWishlistClick,
+        onCartClick
+    )
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 24.dp
+            ),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+
+        items.forEachIndexed { index, item ->
+
+            ProfileQuickActionItem(
+                item = item,
+                modifier = Modifier.weight(1f),
+                onClick = clickActions[index]
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProfileQuickActionItem(
+    item: ProfileQuickAction,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+
+    Card(
+        onClick = onClick,
+        modifier = modifier,
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(
+            width = 0.5.dp,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 0.dp
+        )
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = 10.dp,
+                    vertical = 14.dp
+                ),
+            horizontalAlignment = Alignment.Start
+        ) {
+
+            Box(
+                modifier = Modifier
+                    .size(42.dp)
+                    .clip(
+                        RoundedCornerShape(12.dp)
+                    )
+                    .background(
+                        MaterialTheme.colorScheme.primary.copy(
+                            alpha = 0.08f
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+
+                Icon(
+                    painter = painterResource(
+                        item.icon
+                    ),
+                    contentDescription = item.title,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
+
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
+
+            Text(
+                text = item.title,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1
+            )
+
+            Spacer(
+                modifier = Modifier.height(2.dp)
+            )
+
+            Text(
+                text = item.description,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1
+            )
+        }
     }
 }
