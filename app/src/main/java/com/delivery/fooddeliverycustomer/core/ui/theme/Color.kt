@@ -59,6 +59,6 @@ val Success = Color(0xFF4CAF50)
 // ===============================
 // Gradient
 // ===============================
-val GradientStart = Color(0xFFFFE3D9)
-val GradientCenter = Color(0xFFFFEEE8)
+val GradientStart = Color(0xFFFD510E)
+val GradientCenter = Color(0xFFFF6F37)
 val GradientEnd = Color(0xFFFFF7F3)

@@ -56,15 +56,13 @@ private val AppDarkColorScheme = darkColorScheme(
 )
 
 val AppLightGradient = Brush.verticalGradient(
-    colors = listOf(
-        GradientStart,
-        GradientStart,
-        GradientCenter,
-        GradientCenter,
-        GradientEnd,
-        GradientEnd,
-        Color.White
-
+    colorStops = arrayOf(
+        0.0f to Color(0xFFFD510E),
+        0.20f to Color(0xFFFF5D24),
+        0.40f to Color(0xFFFF7A45),
+        0.65f to Color(0xFFFFC2AA),
+        0.82f to Color(0xFFFFE8DF),
+        1.0f to Color.White
     )
 )
 

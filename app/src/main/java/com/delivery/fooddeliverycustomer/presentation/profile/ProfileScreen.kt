@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -71,6 +70,18 @@ import com.delivery.fooddeliverycustomer.core.ui.theme.AppHomeGradient
 import com.delivery.fooddeliverycustomer.core.ui.theme.AppLightGradient
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.Surface
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.Dp
+import kotlinx.coroutines.flow.Flow
 
 private data class ProfileMenu(val icon: Int, val title: String, val subtitle: String = "")
 
@@ -84,6 +95,26 @@ fun ProfileScreen(
     onLogout: () -> Unit = {}
 ) {
     val listState = rememberLazyListState()
+    val scrollProgress by remember {
+        derivedStateOf {
+
+            val scrollOffset =
+                if (listState.firstVisibleItemIndex == 0) {
+                    listState.firstVisibleItemScrollOffset
+                } else {
+                    200
+                }
+
+            (scrollOffset / 160f)
+                .coerceIn(0f, 1f)
+        }
+    }
+
+    val collapsed by remember {
+        derivedStateOf {
+            scrollProgress > 0.85f
+        }
+    }
     val isDarkTheme = androidx.compose.foundation.isSystemInDarkTheme()
     var contentVisible by remember { mutableStateOf(false) }
     /* * Trigger the screen entrance animation only once. */
@@ -140,7 +171,15 @@ fun ProfileScreen(
     }
 
 
-    Scaffold { paddingValues ->
+    Scaffold (
+        topBar = {
+            ProfileCollapsedTopBar(
+                scrollProgress = scrollProgress,
+                profileImageUrl = profileImageUrl,
+                name = name
+            )
+        }
+    ){ paddingValues ->
         AnimatedVisibility(
             visible = contentVisible,
             enter = fadeIn(
@@ -328,7 +367,7 @@ private fun ProfileHeader(
                 }
             )
             .statusBarsPadding()
-            .padding(horizontal = 20.dp, vertical = 28.dp)
+            .padding(horizontal = 16.dp, vertical = 28.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -439,7 +478,7 @@ private fun ProfileMenuItem(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
@@ -491,6 +530,110 @@ private fun ProfileMenuItem(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
+        }
+    }
+}
+
+
+/* * ============================================================ * PROFILE COLLAPSED TOOLBAR * ============================================================ */
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ProfileCollapsedTopBar(
+    scrollProgress: Float,
+    profileImageUrl: String?,
+    name: String
+) {
+
+    val alpha by animateFloatAsState(
+        targetValue = scrollProgress,
+        animationSpec = tween(
+            durationMillis = 200,
+            easing = FastOutSlowInEasing
+        ),
+        label = "appBarAlpha"
+    )
+
+    Surface(
+        modifier = Modifier.alpha(alpha),
+        tonalElevation = 1.dp,
+        shadowElevation = 1.dp,
+        color = MaterialTheme.colorScheme.background
+    ) {
+
+        TopAppBar(
+            title = {
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    ProfileAvatar(
+                        profileImageUrl = profileImageUrl,
+                        size = 36.dp
+                    )
+
+                    Spacer(
+                        modifier = Modifier.width(10.dp)
+                    )
+
+                    Text(
+                        text = name,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1
+                    )
+                }
+            }
+        )
+    }
+}
+
+@Composable
+private fun ProfileAvatar(
+    profileImageUrl: String?,
+    size: Dp,
+    modifier: Modifier = Modifier
+) {
+
+    Box(
+        modifier = modifier
+            .size(size)
+            .clip(CircleShape)
+    ) {
+
+        if (!profileImageUrl.isNullOrEmpty()) {
+
+            AsyncImage(
+                model = profileImageUrl,
+                contentDescription = "Profile",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+
+        } else {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        MaterialTheme.colorScheme.primary
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+
+                Icon(
+                    painter = painterResource(
+                        R.drawable.person_3_24px
+                    ),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(
+                        size * 0.48f
+                    )
+                )
+            }
         }
     }
 }

@@ -60,21 +60,13 @@ fun CartScreen(
 
     Scaffold(
         topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .statusBarsPadding()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Text(
-                    text = "Your Cart",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                )
-            }
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Your Cart"
+                    )
+                }
+            )
         }
 
     ) { paddingValues ->
