@@ -50,7 +50,6 @@ fun HomeLocationHeader(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .statusBarsPadding()
             .background(
                 MaterialTheme.colorScheme.background
             )

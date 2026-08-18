@@ -1,5 +1,6 @@
 package com.delivery.fooddeliverycustomer.presentation.home
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -67,10 +68,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
@@ -126,7 +129,22 @@ fun HomeScreen(
 
     val listState = rememberLazyListState()
 
-    val navController = rememberNavController()
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        val activity = context as? Activity ?: return@LaunchedEffect
+        val window = activity.window
+
+        window.statusBarColor = android.graphics.Color.WHITE
+
+        WindowCompat.getInsetsController(
+            window,
+            window.decorView
+        ).isAppearanceLightStatusBars = true
+    }
+
+
     var showLocationSheet by remember {
         mutableStateOf(false)
     }
@@ -137,7 +155,6 @@ fun HomeScreen(
 
 
     var contentVisible by remember { mutableStateOf(false) }
-    /* * Trigger the screen entrance animation only once. */
 
     LaunchedEffect(Unit) {
         contentVisible = true
@@ -169,7 +186,9 @@ fun HomeScreen(
         )
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding(),
             state = listState
         ) {
 
@@ -258,31 +277,39 @@ fun HomeScreen(
                 }
             }
 
-
-            // --------------------------------------------------
             // Banner
-            // --------------------------------------------------
-
             item {
                 HomeBannerPager(
                     pagerState = pagerState
                 )
             }
 
-            // --------------------------------------------------
             // Categories
-            // --------------------------------------------------
-
             item {
+                CategorySection(
+                    categories = foodCategories,
 
-//            CategoriesSection()
+                    onSeeAllClick = {
+                        // Navigate to all categories
+                        // navController.navigate(
+                        //     NavRoutes.Categories.route
+                        // )
+                    },
+
+                    onCategoryClick = { category ->
+
+                        // Navigate/filter restaurants by category
+                        // navController.navigate(
+                        //     NavRoutes.CategoryDetails.createRoute(
+                        //         category.name
+                        //     )
+                        // )
+                    }
+                )
             }
 
-            // --------------------------------------------------
             // Popular Restaurants
-            // --------------------------------------------------
             item {
-
                 RestaurantSection(
                     restaurants = restaurants,
 
@@ -303,16 +330,17 @@ fun HomeScreen(
                 )
             }
 
-            // --------------------------------------------------
             // Offers
-            // --------------------------------------------------
-
             item {
-
 //            OffersSection()
             }
 
-            // Add more sections here...
+            // Footer
+            item {
+                HomeFooterSection(
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
         }
 
         // ======================================================

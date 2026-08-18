@@ -22,9 +22,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.data.model.FoodCategory
@@ -34,52 +36,35 @@ fun FoodCategoryItem(
     category: FoodCategory,
     onClick: () -> Unit
 ) {
-    Surface(
+
+    Column(
         modifier = Modifier
-            .width(80.dp)
-            .height(100.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surface
+            .width(82.dp)
+            .clickable {
+                onClick()
+            },
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
+
+        AsyncImage(
+            model = category.icon,
+            contentDescription = category.name,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
+                .size(68.dp)
+                .clip(CircleShape)
+        )
 
-            Box(
-                modifier = Modifier
-                    .size(58.dp)
-                    .clip(CircleShape)
-                    .background(
-                        MaterialTheme.colorScheme.primary.copy(
-                            alpha = 0.10f
-                        )
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                AsyncImage(
-                    model = category.icon,
-                    contentDescription = category.name,
-                    modifier = Modifier.size(52.dp)
-                )
-            }
+        Spacer(
+            modifier = Modifier.height(6.dp)
+        )
 
-            Spacer(
-                modifier = Modifier.height(6.dp)
-            )
-
-            Text(
-                text = category.name,
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 2,
-                textAlign = TextAlign.Center
-            )
-        }
+        Text(
+            text = category.name,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Medium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
