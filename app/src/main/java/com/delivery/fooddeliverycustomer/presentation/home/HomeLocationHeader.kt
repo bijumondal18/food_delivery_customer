@@ -27,15 +27,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
 
 @Composable
 fun HomeLocationHeader(
     location: String,
+    profileImageUrl: String? = null,
     onLocationClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
@@ -101,7 +104,7 @@ fun HomeLocationHeader(
                     }
 
                     Spacer(
-                        modifier = Modifier.width(4.dp)
+                        modifier = Modifier.width(8.dp)
                     )
 
                     Column {
@@ -141,14 +144,35 @@ fun HomeLocationHeader(
                         .size(36.dp)
                         .clip(CircleShape)
                         .background(
-                            MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
+                            MaterialTheme.colorScheme.onBackground.copy(
+                                alpha = 0.05f
+                            )
                         ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.notifications_24px),
-                        contentDescription = "Notifications"
-                    )
+
+                    if (!profileImageUrl.isNullOrEmpty()) {
+
+                        AsyncImage(
+                            model = profileImageUrl,
+                            contentDescription = "Profile",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(CircleShape)
+                        )
+
+                    } else {
+
+                        Icon(
+                            painter = painterResource(
+                                R.drawable.person_3_24px
+                            ),
+                            contentDescription = "Profile",
+                            tint = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
                 }
             }
         }

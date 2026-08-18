@@ -186,7 +186,7 @@ fun HomeScreen(
                     onLocationClick = {
                         showLocationSheet = true
                     },
-
+                    profileImageUrl = "",
                     onProfileClick = onNavigateToProfile
 
                 )
