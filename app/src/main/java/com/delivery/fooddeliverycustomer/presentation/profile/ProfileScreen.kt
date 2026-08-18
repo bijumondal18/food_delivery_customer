@@ -89,13 +89,20 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.lerp
 import kotlinx.coroutines.flow.Flow
 
-private data class ProfileMenu(val icon: Int, val title: String, val subtitle: String = "")
+ data class ProfileMenu(
+    val icon: Int,
+    val title: String,
+    val subtitle: String = "",
+    val iconColor: Color? = null,
+    val iconBackground: Color? = null
+)
 
-private data class ProfileQuickAction(
+ data class ProfileQuickAction(
     val icon: Int,
     val title: String,
     val description: String
@@ -150,25 +157,33 @@ fun ProfileScreen(
     val accountItems = remember {
         listOf(
             ProfileMenu(
+                R.drawable.person_edit_24px,
+                "Edit Profile",
+                "Update your personal information",
+                iconColor = Color(0xFF4CAF50),
+                iconBackground = Color(0xFFE8F5E9)
+            ),
+            ProfileMenu(
                 R.drawable.location_on_24px,
                 "Saved Addresses",
-                "Manage your delivery addresses"
+                "Manage your delivery addresses",
+                iconColor = Color(0xFF2196F3),
+                iconBackground = Color(0xFFE3F2FD)
             ),
             ProfileMenu(
                 R.drawable.notifications_24px,
                 "Notifications",
-                "Manage notification preferences"
+                "Manage notification preferences",
+                iconColor = Color(0xFF9C27B0),
+                iconBackground = Color(0xFFF3E5F5)
             ),
             ProfileMenu(
                 R.drawable.settings_24px,
                 "Settings",
-                "App preferences"
+                "App preferences",
+                iconColor = Color(0xFFFF9800),
+                iconBackground = Color(0xFFFFF3E0)
             ),
-            ProfileMenu(
-                R.drawable.help_24px,
-                "Help & Support",
-                "We're here to help"
-            )
         )
     }
 
@@ -176,23 +191,64 @@ fun ProfileScreen(
         listOf(
             ProfileMenu(
                 R.drawable.help_24px,
-                "Terms & Conditions"
+                "Terms & Conditions",
+                iconColor = Color(0xFF607D8B),
+                iconBackground = Color(0xFFECEFF1)
             ),
             ProfileMenu(
                 R.drawable.help_24px,
-                "Privacy Policy"
+                "Privacy Policy",
+                iconColor = Color(0xFF3F51B5),
+                iconBackground = Color(0xFFE8EAF6)
             ),
             ProfileMenu(
                 R.drawable.help_24px,
-                "Restaurant Partner Terms & Conditions"
+                "Restaurant Partner Terms & Conditions",
+                iconColor = Color(0xFF795548),
+                iconBackground = Color(0xFFEFEBE9)
             ),
             ProfileMenu(
                 R.drawable.help_24px,
-                "TastyGo Refund Policy"
+                "Khaana Refund Policy",
+                iconColor = Color(0xFF009688),
+                iconBackground = Color(0xFFE0F2F1)
             ),
             ProfileMenu(
                 R.drawable.help_24px,
-                "Customer Support"
+                "Customer Support",
+                iconColor = Color(0xFFFF5722),
+                iconBackground = Color(0xFFFBE9E7)
+            )
+        )
+    }
+
+     data class MenuColors(
+        val icon: Color,
+        val background: Color
+    )
+
+    @Composable
+     fun profileMenuColors(): List<MenuColors> {
+        return listOf(
+            MenuColors(
+                icon = Color(0xFF4CAF50),
+                background = Color(0xFFE8F5E9)
+            ),
+            MenuColors(
+                icon = Color(0xFF2196F3),
+                background = Color(0xFFE3F2FD)
+            ),
+            MenuColors(
+                icon = Color(0xFF9C27B0),
+                background = Color(0xFFF3E5F5)
+            ),
+            MenuColors(
+                icon = Color(0xFFFF9800),
+                background = Color(0xFFFFF3E0)
+            ),
+            MenuColors(
+                icon = Color(0xFFE91E63),
+                background = Color(0xFFFCE4EC)
             )
         )
     }
@@ -254,6 +310,8 @@ fun ProfileScreen(
 
             item {
 
+                Spacer(modifier = Modifier.height(16.dp))
+
                 ProfileQuickActions(
                     items = quickActions,
                     onOrdersClick = onOrdersClick,
@@ -269,6 +327,7 @@ fun ProfileScreen(
                     text = "Account",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(
                         start = 20.dp,
                         end = 20.dp,
@@ -280,18 +339,19 @@ fun ProfileScreen(
 
             item {
 
-
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        accountItems.forEach { item ->
-                            ProfileMenuItem(
-                                icon = item.icon,
-                                title = item.title,
-                                subtitle = item.subtitle,
-                                onClick = {}
-                            )
-                        }
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    accountItems.forEach { item ->
+                        ProfileMenuItem(
+                            icon = item.icon,
+                            title = item.title,
+                            subtitle = item.subtitle,
+                            iconTint = item.iconColor,
+                            iconBackground = item.iconBackground,
+                            onClick = {}
+                        )
+                    }
 
                 }
             }
@@ -302,6 +362,7 @@ fun ProfileScreen(
                     text = "Feedback",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(
                         start = 20.dp,
                         end = 20.dp,
@@ -323,6 +384,8 @@ fun ProfileScreen(
                             icon = item.icon,
                             title = item.title,
                             subtitle = item.subtitle,
+                            iconTint = item.iconColor,
+                            iconBackground = item.iconBackground,
                             onClick = {}
                         )
                     }
@@ -401,9 +464,18 @@ private fun ProfileMenuItem(
     title: String,
     subtitle: String,
     modifier: Modifier = Modifier,
-    iconTint: Color = MaterialTheme.colorScheme.primary,
+    iconTint: Color? = null,
+    iconBackground: Color? = null,
     onClick: () -> Unit
 ) {
+
+    val finalIconColor =
+        iconTint ?: MaterialTheme.colorScheme.primary
+
+    val finalIconBackground =
+        iconBackground
+            ?: MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+
     Card(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
@@ -416,22 +488,20 @@ private fun ProfileMenuItem(
                 .padding(vertical = 12.dp, horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            /* * Icon container */
 
             Box(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)),
+                    .background(finalIconBackground),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(icon),
                     contentDescription = null,
-                    tint = iconTint
+                    tint = finalIconColor
                 )
             }
-            /* * Text */
 
             Column(
                 modifier = Modifier
@@ -441,18 +511,22 @@ private fun ProfileMenuItem(
                 Text(
                     text = title,
                     fontWeight = FontWeight.SemiBold,
-                    maxLines = 2
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
+
                 if (subtitle.isNotBlank()) {
                     Text(
                         text = subtitle,
+                        fontWeight = FontWeight.Medium,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
-            /* * Chevron */
+
             Icon(
                 painter =
                     painterResource(R.drawable.chevron_right_24px),
@@ -657,8 +731,10 @@ private fun ProfileAnimatedHeader(
             Text(
                 text = name,
                 fontSize = nameSize,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
 
             Spacer(
@@ -667,12 +743,14 @@ private fun ProfileAnimatedHeader(
 
             Text(
                 text = phone,
+                fontWeight = FontWeight.Medium,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.graphicsLayer {
                     alpha = phoneAlpha
                 },
-                maxLines = 1
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -778,84 +856,3 @@ private fun ProfileQuickActions(
     }
 }
 
-@Composable
-private fun ProfileQuickActionItem(
-    item: ProfileQuickAction,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
-) {
-
-    Card(
-        onClick = onClick,
-        modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        border = BorderStroke(
-            width = 0.5.dp,
-            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f)
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp
-        )
-    ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = 10.dp,
-                    vertical = 14.dp
-                ),
-            horizontalAlignment = Alignment.Start
-        ) {
-
-            Box(
-                modifier = Modifier
-                    .size(42.dp)
-                    .clip(
-                        RoundedCornerShape(12.dp)
-                    )
-                    .background(
-                        MaterialTheme.colorScheme.primary.copy(
-                            alpha = 0.08f
-                        )
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-
-                Icon(
-                    painter = painterResource(
-                        item.icon
-                    ),
-                    contentDescription = item.title,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(22.dp)
-                )
-            }
-
-            Spacer(
-                modifier = Modifier.height(8.dp)
-            )
-
-            Text(
-                text = item.title,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 1
-            )
-
-            Spacer(
-                modifier = Modifier.height(2.dp)
-            )
-
-            Text(
-                text = item.description,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1
-            )
-        }
-    }
-}

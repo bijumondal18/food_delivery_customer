@@ -80,9 +80,7 @@ fun AppNavigation() {
             route = NavRoutes.Profile.route
         ) {
             ProfileScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                },
+                onBackClick = navController::popBackStack,
                 onOrdersClick = {
                     navController.navigate(NavRoutes.Orders.route)
                 },
@@ -99,8 +97,8 @@ fun AppNavigation() {
         composable(
             route = NavRoutes.Cart.route
         ) {
-            CartScreen (
-
+            CartScreen(
+                onBackClick = navController::popBackStack,
             )
         }
 
@@ -110,7 +108,7 @@ fun AppNavigation() {
         composable(
             route = NavRoutes.Wishlist.route
         ) {
-            CartScreen (
+            CartScreen(
 
             )
         }
@@ -121,8 +119,8 @@ fun AppNavigation() {
         composable(
             route = NavRoutes.Orders.route
         ) {
-            OrderScreen (
-
+            OrderScreen(
+                onBackClick = navController::popBackStack
             )
         }
 

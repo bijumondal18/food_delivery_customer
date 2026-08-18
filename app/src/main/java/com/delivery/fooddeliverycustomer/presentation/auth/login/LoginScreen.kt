@@ -67,7 +67,7 @@ fun LoginBottomSheet(
             }
 
             Text(
-                text = "Welcome to TastyGo",
+                text = "Welcome to Khaana",
                 style =
                     MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold

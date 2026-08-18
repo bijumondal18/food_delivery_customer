@@ -200,7 +200,9 @@ fun MainScreen() {
             composable(
                 BottomNavRoute.Orders.route
             ) {
-                OrderScreen()
+                OrderScreen(
+                    onBackClick = {}
+                )
             }
 
             composable(
