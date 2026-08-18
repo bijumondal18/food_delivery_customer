@@ -190,31 +190,31 @@ fun ProfileScreen(
     val feedbackItems = remember {
         listOf(
             ProfileMenu(
-                R.drawable.help_24px,
+                R.drawable.article_24px,
                 "Terms & Conditions",
                 iconColor = Color(0xFF607D8B),
                 iconBackground = Color(0xFFECEFF1)
             ),
             ProfileMenu(
-                R.drawable.help_24px,
+                R.drawable.policy_24px,
                 "Privacy Policy",
                 iconColor = Color(0xFF3F51B5),
                 iconBackground = Color(0xFFE8EAF6)
             ),
             ProfileMenu(
-                R.drawable.help_24px,
+                R.drawable.privacy_tip_24px,
                 "Restaurant Partner Terms & Conditions",
                 iconColor = Color(0xFF795548),
                 iconBackground = Color(0xFFEFEBE9)
             ),
             ProfileMenu(
-                R.drawable.help_24px,
+                R.drawable.demography_24px,
                 "Khaana Refund Policy",
                 iconColor = Color(0xFF009688),
                 iconBackground = Color(0xFFE0F2F1)
             ),
             ProfileMenu(
-                R.drawable.help_24px,
+                R.drawable.headset_mic_24px,
                 "Customer Support",
                 iconColor = Color(0xFFFF5722),
                 iconBackground = Color(0xFFFBE9E7)

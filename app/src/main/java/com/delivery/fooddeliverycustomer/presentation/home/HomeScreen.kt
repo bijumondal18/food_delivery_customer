@@ -78,6 +78,7 @@ import com.delivery.fooddeliverycustomer.core.components.FoodCategoryItem
 import com.delivery.fooddeliverycustomer.core.components.LocationBottomSheet
 import com.delivery.fooddeliverycustomer.core.navigation.NavRoutes
 import com.delivery.fooddeliverycustomer.data.model.FoodCategory
+import com.delivery.fooddeliverycustomer.data.model.restaurants
 
 
 private val foodCategories = listOf(
@@ -280,10 +281,26 @@ fun HomeScreen(
             // --------------------------------------------------
             // Popular Restaurants
             // --------------------------------------------------
-
             item {
 
-//            PopularRestaurantsSection()
+                RestaurantSection(
+                    restaurants = restaurants,
+
+                    onSeeAllClick = {
+                        // Navigate to all restaurants
+                        // navController.navigate(NavRoutes.Restaurants.route)
+                    },
+
+                    onRestaurantClick = { restaurant ->
+
+                        // Navigate to restaurant details
+                        // navController.navigate(
+                        //     NavRoutes.RestaurantDetails.createRoute(
+                        //         restaurant.name
+                        //     )
+                        // )
+                    }
+                )
             }
 
             // --------------------------------------------------
