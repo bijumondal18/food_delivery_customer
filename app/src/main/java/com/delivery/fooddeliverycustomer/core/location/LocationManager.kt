@@ -59,29 +59,19 @@ class LocationManager @Inject constructor(
                     ) ?: emptyList()
 
                 if (addresses.isNotEmpty()) {
-
                     val address = addresses[0]
-
-                    buildString {
-
-                        address.subLocality?.let {
-                            append(it)
-                        }
-
-                        if (address.locality != null) {
-
-                            if (isNotEmpty()) {
-                                append(", ")
-                            }
-
-                            append(address.locality)
-                        }
-
-                    }.ifEmpty {
-                        "Current location"
+                    buildList {
+                        address.subLocality?.takeIf { it.isNotBlank() }?.let { add(it) }
+                        address.locality?.takeIf { it.isNotBlank() }?.let { add(it) }
                     }
+                        .distinct()
+                        .joinToString(", ")
+                        .ifEmpty {
+                            "Current location"
+                        }
 
                 } else {
+
                     "Current location"
                 }
 
