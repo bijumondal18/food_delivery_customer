@@ -65,15 +65,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
-import com.delivery.fooddeliverycustomer.core.ui.theme.AppDarkGradient
-import com.delivery.fooddeliverycustomer.core.ui.theme.AppHomeGradient
-import com.delivery.fooddeliverycustomer.core.ui.theme.AppLightGradient
-import kotlinx.coroutines.delay
-import kotlin.time.Duration.Companion.milliseconds
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.windowInsetsPadding

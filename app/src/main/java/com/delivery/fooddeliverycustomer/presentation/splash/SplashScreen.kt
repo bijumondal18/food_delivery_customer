@@ -29,9 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import com.delivery.fooddeliverycustomer.core.location.LocationManager
-import com.delivery.fooddeliverycustomer.core.ui.theme.AppDarkGradient
-import com.delivery.fooddeliverycustomer.core.ui.theme.AppLightGradient
 import com.delivery.fooddeliverycustomer.core.ui.theme.Quicksand
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

@@ -53,6 +53,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -64,6 +65,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
@@ -80,44 +82,11 @@ import com.delivery.fooddeliverycustomer.R
 import com.delivery.fooddeliverycustomer.core.components.FoodCategoryItem
 import com.delivery.fooddeliverycustomer.core.components.LocationBottomSheet
 import com.delivery.fooddeliverycustomer.core.navigation.NavRoutes
+import com.delivery.fooddeliverycustomer.core.ui.theme.AppLightGradient
 import com.delivery.fooddeliverycustomer.data.model.FoodCategory
+import com.delivery.fooddeliverycustomer.data.model.foodCategories
 import com.delivery.fooddeliverycustomer.data.model.restaurants
 
-
-private val foodCategories = listOf(
-    FoodCategory(
-        "Pizza",
-        "https://png.pngtree.com/png-vector/20241211/ourmid/pngtree-authentic-italian-pizza-with-cheese-and-fresh-vegetable-toppings-png-image_14714611.png"
-    ),
-    FoodCategory(
-        "Burger",
-        "https://png.pngtree.com/png-vector/20241211/ourmid/pngtree-authentic-italian-pizza-with-cheese-and-fresh-vegetable-toppings-png-image_14714611.png"
-    ),
-    FoodCategory(
-        "Biryani",
-        "https://png.pngtree.com/png-vector/20241211/ourmid/pngtree-authentic-italian-pizza-with-cheese-and-fresh-vegetable-toppings-png-image_14714611.png"
-    ),
-    FoodCategory(
-        "Chinese",
-        "https://png.pngtree.com/png-vector/20241211/ourmid/pngtree-authentic-italian-pizza-with-cheese-and-fresh-vegetable-toppings-png-image_14714611.png"
-    ),
-    FoodCategory(
-        "Desserts",
-        "https://png.pngtree.com/png-vector/20241211/ourmid/pngtree-authentic-italian-pizza-with-cheese-and-fresh-vegetable-toppings-png-image_14714611.png"
-    ),
-    FoodCategory(
-        "Drinks",
-        "https://png.pngtree.com/png-vector/20241211/ourmid/pngtree-authentic-italian-pizza-with-cheese-and-fresh-vegetable-toppings-png-image_14714611.png"
-    ),
-    FoodCategory(
-        "South Indian",
-        "https://png.pngtree.com/png-vector/20241211/ourmid/pngtree-authentic-italian-pizza-with-cheese-and-fresh-vegetable-toppings-png-image_14714611.png"
-    ),
-    FoodCategory(
-        "Fast Food",
-        "https://png.pngtree.com/png-vector/20241211/ourmid/pngtree-authentic-italian-pizza-with-cheese-and-fresh-vegetable-toppings-png-image_14714611.png"
-    )
-)
 
 @Composable
 fun HomeScreen(
@@ -130,21 +99,6 @@ fun HomeScreen(
     val listState = rememberLazyListState()
 
 
-    val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        val activity = context as? Activity ?: return@LaunchedEffect
-        val window = activity.window
-
-        window.statusBarColor = android.graphics.Color.WHITE
-
-        WindowCompat.getInsetsController(
-            window,
-            window.decorView
-        ).isAppearanceLightStatusBars = true
-    }
-
-
     var showLocationSheet by remember {
         mutableStateOf(false)
     }
@@ -153,6 +107,9 @@ fun HomeScreen(
         mutableStateOf(false)
     }
 
+    var selectedCategory by rememberSaveable {
+        mutableStateOf("All")
+    }
 
     var contentVisible by remember { mutableStateOf(false) }
 
@@ -188,152 +145,121 @@ fun HomeScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(
+                    color = MaterialTheme.colorScheme.background,
+                )
                 .statusBarsPadding(),
             state = listState
         ) {
-
-            // --------------------------------------------------
-            // Location + Notification Header
-            // This scrolls away
-            // --------------------------------------------------
-
             item {
-
                 HomeLocationHeader(
                     location = state.location?.address
                         ?: "Fetching location...",
-
                     onLocationClick = {
                         showLocationSheet = true
                     },
                     profileImageUrl = "",
-                    onProfileClick = onNavigateToProfile
-
+                    onProfileClick = onNavigateToProfile,
+                    onLoginClick = {},
+                    isLoggedIn = true
                 )
             }
 
-            // --------------------------------------------------
-            // Search Bar
-            // This remains pinned
-            // --------------------------------------------------
-
             stickyHeader {
-
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.background,
-                    shadowElevation = if (
-                        listState.firstVisibleItemIndex > 0
-                    ) {
-                        4.dp
-                    } else {
-                        0.dp
-                    }
+                Column(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                horizontal = 16.dp,
-                                vertical = 10.dp
-                            )
-                            .clip(
-                                RoundedCornerShape(12.dp)
-                            )
-                            .border(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.outline,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .clickable {
-                                // Navigate to Search Screen
-                                onNavigateToSearch()
-                            }
-                            .padding(
-                                horizontal = 16.dp,
-                                vertical = 13.dp
-                            ),
-                        verticalAlignment = Alignment.CenterVertically
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.background,
+                        shadowElevation = if (
+                            listState.firstVisibleItemIndex > 0
+                        ) {
+                            2.dp
+                        } else {
+                            0.dp
+                        }
                     ) {
 
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Search",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(22.dp)
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    horizontal = 16.dp,
+                                    vertical = 10.dp
+                                )
+                                .clip(CircleShape)
+                                .border(
+                                    width = 1.dp,
+                                    color = MaterialTheme.colorScheme.outline,
+                                    shape = CircleShape
+                                )
+                                .clickable {
+                                    onNavigateToSearch()
+                                }
+                                .background(
+                                    color = MaterialTheme.colorScheme.background,
+                                    shape = CircleShape
+                                )
+                                .padding(
+                                    horizontal = 16.dp,
+                                    vertical = 13.dp
+                                ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
 
-                        Spacer(
-                            modifier = Modifier.width(10.dp)
-                        )
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(22.dp)
+                            )
 
-                        Text(
-                            text = "Search food, restaurants...",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                            Spacer(
+                                modifier = Modifier.width(10.dp)
+                            )
+
+                            Text(
+                                text = "Search food, restaurants...",
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
+
+
+                    // Categories
+
+                    CategorySection(
+                        categories = foodCategories,
+                        selectedCategory = selectedCategory,
+                        onSeeAllClick = {},
+                        onCategoryClick = {category ->
+                            selectedCategory =
+                                category?.name ?: "All"
+                        }
+                    )
+
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(),
+                        thickness = 0.5.dp,
+                        color = MaterialTheme.colorScheme.outlineVariant
+                    )
+
                 }
             }
 
-            // Banner
-            item {
-                HomeBannerPager(
-                    pagerState = pagerState
-                )
-            }
-
-            // Categories
-            item {
-                CategorySection(
-                    categories = foodCategories,
-
-                    onSeeAllClick = {
-                        // Navigate to all categories
-                        // navController.navigate(
-                        //     NavRoutes.Categories.route
-                        // )
-                    },
-
-                    onCategoryClick = { category ->
-
-                        // Navigate/filter restaurants by category
-                        // navController.navigate(
-                        //     NavRoutes.CategoryDetails.createRoute(
-                        //         category.name
-                        //     )
-                        // )
-                    }
-                )
-            }
 
             // Popular Restaurants
             item {
                 RestaurantSection(
                     restaurants = restaurants,
-
-                    onSeeAllClick = {
-                        // Navigate to all restaurants
-                        // navController.navigate(NavRoutes.Restaurants.route)
-                    },
-
-                    onRestaurantClick = { restaurant ->
-
-                        // Navigate to restaurant details
-                        // navController.navigate(
-                        //     NavRoutes.RestaurantDetails.createRoute(
-                        //         restaurant.name
-                        //     )
-                        // )
-                    }
+                    onSeeAllClick = {},
+                    onRestaurantClick = {}
                 )
             }
 
-            // Offers
-            item {
-//            OffersSection()
-            }
 
             // Footer
             item {

@@ -64,6 +64,7 @@ fun FoodCategoryItem(
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.Medium,
             maxLines = 1,
+            color = MaterialTheme.colorScheme.onBackground,
             overflow = TextOverflow.Ellipsis
         )
     }

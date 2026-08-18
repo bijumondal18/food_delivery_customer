@@ -4,7 +4,11 @@ data class Restaurant(
     val name: String,
     val description: String,
     val imageUrl: String,
-    val rating: String
+    val rating: String,
+    val distance: String = "1.2 km",
+    val offer: String = "50% OFF",
+    val deliveryTime: String = "30–35 min",
+    val isFavourite: Boolean = false
 )
 
 val restaurants = listOf(

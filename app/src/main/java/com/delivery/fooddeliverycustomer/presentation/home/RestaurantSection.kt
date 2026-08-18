@@ -49,6 +49,7 @@ fun RestaurantSection(
                 text = "Nearby Restaurants",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.weight(1f)
             )
 
@@ -82,7 +83,7 @@ fun RestaurantSection(
         ) {
 
             restaurants
-                .chunked(3)
+                .chunked(2)
                 .forEach { rowRestaurants ->
 
                     Row(
@@ -94,16 +95,16 @@ fun RestaurantSection(
 
                             RestaurantCard(
                                 restaurant = restaurant,
-                                modifier = Modifier.weight(1f),
                                 onClick = {
                                     onRestaurantClick(restaurant)
-                                }
+                                },
+                                onFavouriteClick = {}
                             )
                         }
 
                         // Fill remaining space if last row
                         repeat(
-                            3 - rowRestaurants.size
+                            2 - rowRestaurants.size
                         ) {
                             Spacer(
                                 modifier = Modifier.weight(1f)

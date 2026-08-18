@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,7 +41,9 @@ fun HomeLocationHeader(
     location: String,
     profileImageUrl: String? = null,
     onLocationClick: () -> Unit,
-    onProfileClick: () -> Unit
+    onProfileClick: () -> Unit,
+    isLoggedIn: Boolean,
+    onLoginClick: () -> Unit
 ) {
 
     val interactionSource = remember {
@@ -51,7 +54,7 @@ fun HomeLocationHeader(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                MaterialTheme.colorScheme.background
+                color = MaterialTheme.colorScheme.background,
             )
             .padding(
                 horizontal = 16.dp,
@@ -120,12 +123,14 @@ fun HomeLocationHeader(
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.SemiBold,
                                 maxLines = 1,
+                                color = MaterialTheme.colorScheme.onBackground,
                                 overflow = TextOverflow.Ellipsis
                             )
 
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,
                                 contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -134,44 +139,58 @@ fun HomeLocationHeader(
                 }
             }
 
-            IconButton(
-                onClick = onProfileClick
-            ) {
 
-                Box(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .clip(CircleShape)
-                        .background(
-                            MaterialTheme.colorScheme.onBackground.copy(
-                                alpha = 0.05f
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
+            if (isLoggedIn) {
+
+
+                IconButton(
+                    onClick = onProfileClick
                 ) {
 
-                    if (!profileImageUrl.isNullOrEmpty()) {
-
-                        AsyncImage(
-                            model = profileImageUrl,
-                            contentDescription = "Profile",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(CircleShape)
-                        )
-
-                    } else {
-
-                        Icon(
-                            painter = painterResource(
-                                R.drawable.person_3_24px
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(
+                                MaterialTheme.colorScheme.onBackground.copy(
+                                    alpha = 0.05f
+                                )
                             ),
-                            contentDescription = "Profile",
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(20.dp)
-                        )
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        if (!profileImageUrl.isNullOrEmpty()) {
+
+                            AsyncImage(
+                                model = profileImageUrl,
+                                contentDescription = "Profile",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(CircleShape)
+                            )
+
+                        } else {
+
+                            Icon(
+                                painter = painterResource(
+                                    R.drawable.person_3_24px
+                                ),
+                                contentDescription = "Profile",
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
                     }
+                }
+            } else {
+
+                TextButton(onClick = onLoginClick) {
+                    Text(
+                        text = "Login",
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                 }
             }
         }

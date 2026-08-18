@@ -24,7 +24,7 @@ fun HomeFooterSection(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = Color.LightGray.copy(alpha = 0.2f)
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.05f)
             )
             .padding(
                 top = 30.dp,
