@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,8 +25,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.core.components.FoodCategoryItem
 import com.delivery.fooddeliverycustomer.data.model.FoodCategory
 
@@ -69,6 +73,7 @@ fun CategorySection(
 
                 CategoryTab(
                     title = categoryName,
+                    imageUrl = category?.icon,
                     selected = isSelected,
                     onClick = {
                         onCategoryClick(category)
@@ -76,10 +81,6 @@ fun CategorySection(
                 )
             }
         }
-
-//        Spacer(
-//            modifier = Modifier.height(4.dp)
-//        )
     }
 }
 
@@ -87,6 +88,7 @@ fun CategorySection(
 @Composable
 private fun CategoryTab(
     title: String,
+    imageUrl: String? = null,
     selected: Boolean,
     onClick: () -> Unit
 ) {
@@ -103,20 +105,41 @@ private fun CategoryTab(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(
-            text = title,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = if (selected) {
-                FontWeight.Bold
-            } else {
-                FontWeight.Medium
-            },
-            color = if (selected) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.onSurfaceVariant
-            }
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            // Category image
+//            if (!imageUrl.isNullOrEmpty()) {
+//
+//                AsyncImage(
+//                    model = imageUrl,
+//                    contentDescription = title,
+//                    contentScale = ContentScale.Crop,
+//                    modifier = Modifier
+//                        .size(28.dp)
+//                        .clip(CircleShape)
+//                )
+//
+//                Spacer(
+//                    modifier = Modifier.width(6.dp)
+//                )
+//            }
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = if (selected) {
+                    FontWeight.Bold
+                } else {
+                    FontWeight.Medium
+                },
+                color = if (selected) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                }
+            )
+        }
 
         Spacer(
             modifier = Modifier.height(6.dp)

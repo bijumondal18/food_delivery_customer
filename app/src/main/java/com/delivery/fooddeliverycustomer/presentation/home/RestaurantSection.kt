@@ -2,6 +2,7 @@ package com.delivery.fooddeliverycustomer.presentation.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,10 +36,6 @@ fun RestaurantSection(
                 vertical = 12.dp
             )
     ) {
-
-        // --------------------------------------------------
-        // Section Header
-        // --------------------------------------------------
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -74,9 +71,6 @@ fun RestaurantSection(
             modifier = Modifier.height(12.dp)
         )
 
-        // --------------------------------------------------
-        // 3 Column Grid
-        // --------------------------------------------------
 
         Column(
             verticalArrangement = Arrangement.spacedBy(14.dp)
@@ -93,19 +87,21 @@ fun RestaurantSection(
 
                         rowRestaurants.forEach { restaurant ->
 
-                            RestaurantCard(
-                                restaurant = restaurant,
-                                onClick = {
-                                    onRestaurantClick(restaurant)
-                                },
-                                onFavouriteClick = {}
-                            )
+                            Box(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                RestaurantCard(
+                                    restaurant = restaurant,
+                                    onClick = {
+                                        onRestaurantClick(restaurant)
+                                    },
+                                    onFavouriteClick = {}
+                                )
+                            }
                         }
 
                         // Fill remaining space if last row
-                        repeat(
-                            2 - rowRestaurants.size
-                        ) {
+                        if (rowRestaurants.size == 1) {
                             Spacer(
                                 modifier = Modifier.weight(1f)
                             )
