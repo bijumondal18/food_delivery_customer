@@ -250,6 +250,18 @@ fun HomeScreen(
                 }
             }
 
+            // Nearby Home Kitchens
+            item {
+                HomeKitchenSection(
+                    onSeeAllClick = {
+                        // Navigate to all home kitchens
+                    },
+
+                    onKitchenClick = { kitchen ->
+                        // Navigate to home kitchen details
+                    }
+                )
+            }
 
             // Popular Restaurants
             item {

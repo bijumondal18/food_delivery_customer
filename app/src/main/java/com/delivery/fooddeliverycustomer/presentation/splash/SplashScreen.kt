@@ -225,7 +225,7 @@ fun SplashScreen(
     ) {
 
         Text(
-            text = "Khaana",
+            text = "Khabo",
             modifier = Modifier
                 .alpha(alpha.value)
                 .scale(scale.value),

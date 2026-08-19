@@ -107,12 +107,12 @@ import kotlin.io.path.moveTo
                     onClick = onFavouriteClick,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(8.dp)
-                        .size(36.dp)
+                        .padding(20.dp)
+                        .size(24.dp)
                         .clip(CircleShape)
                         .background(
-                            MaterialTheme.colorScheme.background.copy(
-                                alpha = 0.9f
+                            MaterialTheme.colorScheme.onBackground.copy(
+                                alpha = 0.7f
                             )
                         )
                 ) {
@@ -127,7 +127,7 @@ import kotlin.io.path.moveTo
                         tint = if (restaurant.isFavourite) {
                             MaterialTheme.colorScheme.error
                         } else {
-                            MaterialTheme.colorScheme.onSurface
+                            MaterialTheme.colorScheme.error
                         }
                     )
                 }
@@ -168,10 +168,10 @@ import kotlin.io.path.moveTo
                     )
 
                     // Offer
-                    RestaurantInfoItem(
-                        icon = R.drawable.percent_discount_24px,
-                        text = restaurant.offer
-                    )
+//                    RestaurantInfoItem(
+//                        icon = R.drawable.percent_discount_24px,
+//                        text = restaurant.offer
+//                    )
 
                     // Delivery time
                     RestaurantInfoItem(

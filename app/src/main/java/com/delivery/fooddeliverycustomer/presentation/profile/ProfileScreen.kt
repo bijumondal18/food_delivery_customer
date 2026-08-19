@@ -200,7 +200,7 @@ fun ProfileScreen(
             ),
             ProfileMenu(
                 R.drawable.demography_24px,
-                "Khaana Refund Policy",
+                "Khabo Refund Policy",
                 iconColor = Color(0xFF009688),
                 iconBackground = Color(0xFFE0F2F1)
             ),

@@ -67,7 +67,7 @@ fun LoginBottomSheet(
             }
 
             Text(
-                text = "Welcome to Khaana",
+                text = "Welcome to Khabo",
                 style =
                     MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
