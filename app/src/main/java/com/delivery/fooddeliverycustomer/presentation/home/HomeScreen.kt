@@ -263,6 +263,14 @@ fun HomeScreen(
                 )
             }
 
+            item{
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 0.5.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+            }
+
             // Popular Restaurants
             item {
                 RestaurantSection(
