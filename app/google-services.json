@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "484615716097",
+    "project_id": "khabo-63826",
+    "storage_bucket": "khabo-63826.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:484615716097:android:b356c08e949d36c86daf00",
+        "android_client_info": {
+          "package_name": "com.delivery.fooddeliverycustomer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmTX3GvfLdm-lecnWujspFiLaIJFvVua8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

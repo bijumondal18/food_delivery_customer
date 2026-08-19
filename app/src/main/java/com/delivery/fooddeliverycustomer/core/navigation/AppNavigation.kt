@@ -8,6 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.delivery.fooddeliverycustomer.presentation.auth.login.LoginScreen
 import com.delivery.fooddeliverycustomer.presentation.cart.CartScreen
 import com.delivery.fooddeliverycustomer.presentation.home.HomeScreen
 import com.delivery.fooddeliverycustomer.presentation.home.HomeViewModel
@@ -33,10 +34,45 @@ fun AppNavigation() {
             route = NavRoutes.Splash.route,
         ) {
             SplashScreen(
-                onNavigateToMain = {
+                onNavigateToLogin = {
+
+                    navController.navigate(
+                        NavRoutes.Login.route
+                    ) {
+                        popUpTo(NavRoutes.Splash.route) {
+                            inclusive = true
+                        }
+
+                        launchSingleTop = true
+                    }
+                },
+
+                onNavigateToHome = {
                     navController.navigate(NavRoutes.Home.route) {
 
                         popUpTo(NavRoutes.Splash.route) {
+                            inclusive = true
+                        }
+
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        // -----------------------------------------
+        // Login
+        // -----------------------------------------
+        composable(
+            route = NavRoutes.Login.route
+        ) {
+
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(
+                        NavRoutes.Home.route
+                    ) {
+                        popUpTo(NavRoutes.Login.route) {
                             inclusive = true
                         }
 

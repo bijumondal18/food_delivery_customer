@@ -30,13 +30,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.delivery.fooddeliverycustomer.core.ui.theme.Quicksand
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun SplashScreen(
-    onNavigateToMain: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onNavigateToHome: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -208,7 +210,18 @@ fun SplashScreen(
             return@LaunchedEffect
         }
 
-        onNavigateToMain()
+        val currentUser = FirebaseAuth
+            .getInstance()
+            .currentUser
+
+        if (currentUser != null) {
+
+            onNavigateToHome()
+
+        } else {
+
+            onNavigateToLogin()
+        }
     }
 
     // --------------------------------------------------

@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.delivery.fooddeliverycustomer.presentation.auth.login.LoginBottomSheet
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -328,27 +327,5 @@ fun HomeScreen(
             )
         }
 
-        // ======================================================
-        // Login Bottom Sheet
-        // IMPORTANT: Outside LazyColumn
-        // ======================================================
-
-        if (showLoginSheet) {
-
-            LoginBottomSheet(
-
-                onDismiss = {
-                    showLoginSheet = false
-                },
-
-                onGoogleLogin = {
-                    // TODO: Google login
-                },
-
-                onPhoneLogin = {
-                    // TODO: Phone login
-                }
-            )
-        }
     }
 }
