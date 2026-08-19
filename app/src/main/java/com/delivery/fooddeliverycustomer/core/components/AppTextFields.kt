@@ -20,15 +20,20 @@ fun EmailField(
     value: String,
     onValueChange: (String) -> Unit,
     enabled: Boolean = true,
+    errorMessage: String? = null,
     modifier: Modifier = Modifier
 ) {
+
+    val hasError = !errorMessage.isNullOrBlank()
+
+
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier.fillMaxWidth(),
         enabled = enabled,
         singleLine = true,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Email,
@@ -40,6 +45,14 @@ fun EmailField(
         },
         placeholder = {
             Text("Enter your email")
+        },
+        supportingText = {
+            if (hasError) {
+                Text(
+                    text = errorMessage.orEmpty(),
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
         }
     )
 }
@@ -49,15 +62,20 @@ fun PasswordField(
     value: String,
     onValueChange: (String) -> Unit,
     enabled: Boolean = true,
+    errorMessage: String? = null,
     modifier: Modifier = Modifier
 ) {
+
+    val hasError = !errorMessage.isNullOrBlank()
+
+
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier.fillMaxWidth(),
         enabled = enabled,
         singleLine = true,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         visualTransformation = PasswordVisualTransformation(),
         leadingIcon = {
             Icon(
@@ -70,6 +88,14 @@ fun PasswordField(
         },
         placeholder = {
             Text("Enter your password")
+        },
+        supportingText = {
+            if (hasError) {
+                Text(
+                    text = errorMessage.orEmpty(),
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
         }
     )
 }

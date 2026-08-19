@@ -264,7 +264,7 @@ fun HomeScreen(
 
             item{
                 HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                     thickness = 0.5.dp,
                     color = MaterialTheme.colorScheme.outlineVariant
                 )
@@ -275,6 +275,21 @@ fun HomeScreen(
                 RestaurantSection(
                     restaurants = restaurants,
                     onSeeAllClick = {},
+                    onRestaurantClick = {}
+                )
+            }
+
+            item{
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
+                    thickness = 0.5.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+            }
+
+            item {
+                AllRestaurantSection (
+                    restaurants = restaurants,
                     onRestaurantClick = {}
                 )
             }

@@ -60,6 +60,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
+import com.delivery.fooddeliverycustomer.core.ui.theme.LightForeground
+import com.delivery.fooddeliverycustomer.core.ui.theme.Success
 import com.delivery.fooddeliverycustomer.data.model.Restaurant
 import kotlin.io.path.Path
 import kotlin.io.path.moveTo
@@ -79,10 +81,10 @@ import kotlin.io.path.moveTo
         shape = RoundedCornerShape(14.dp),
         border = BorderStroke(width = 0.5.dp, color = MaterialTheme.colorScheme.outline),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onBackground
+            containerColor = LightForeground
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.1.dp
+            defaultElevation = 1.dp
         )
     ) {
 
@@ -186,6 +188,123 @@ import kotlin.io.path.moveTo
 
 
 @Composable
+fun AllRestaurantCard(
+    restaurant: Restaurant,
+    onClick: () -> Unit,
+    onFavouriteClick: () -> Unit
+) {
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(14.dp),
+        border = BorderStroke(width = 0.5.dp, color = MaterialTheme.colorScheme.outline),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 1.dp,
+        )
+    ) {
+
+        Column {
+
+            // Restaurant image
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            ) {
+
+                AsyncImage(
+                    model = restaurant.imageUrl,
+                    contentDescription = restaurant.name,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                // Favourite button
+                IconButton(
+                    onClick = onFavouriteClick,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(20.dp)
+                        .size(24.dp)
+                        .clip(CircleShape)
+                        .background(
+                            MaterialTheme.colorScheme.onBackground.copy(
+                                alpha = 0.7f
+                            )
+                        )
+                ) {
+
+                    Icon(
+                        imageVector = if (restaurant.isFavourite) {
+                            Icons.Default.Favorite
+                        } else {
+                            Icons.Default.FavoriteBorder
+                        },
+                        contentDescription = "Favourite",
+                        tint = if (restaurant.isFavourite) {
+                            MaterialTheme.colorScheme.error
+                        } else {
+                            MaterialTheme.colorScheme.error
+                        }
+                    )
+                }
+            }
+
+
+            Column(
+                modifier = Modifier.padding(12.dp)
+            ) {
+
+                Text(
+                    text = restaurant.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(
+                    modifier = Modifier.height(8.dp)
+                )
+
+                // Restaurant information
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    // Distance
+                    RestaurantInfoItem(
+                        icon = R.drawable.location_on_24px,
+                        text = restaurant.distance
+                    )
+
+                    // Offer
+//                    RestaurantInfoItem(
+//                        icon = R.drawable.percent_discount_24px,
+//                        text = restaurant.offer
+//                    )
+
+                    // Delivery time
+                    RestaurantInfoItem(
+                        icon = R.drawable.nest_clock_farsight_analog_24px,
+                        text = restaurant.deliveryTime
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun RestaurantInfoItem(
     icon: Int,
     text: String
@@ -199,7 +318,7 @@ private fun RestaurantInfoItem(
             painter = painterResource(icon),
             contentDescription = null,
             modifier = Modifier.size(15.dp),
-            tint = MaterialTheme.colorScheme.background
+            tint = Success
         )
 
         Spacer(
@@ -209,7 +328,8 @@ private fun RestaurantInfoItem(
         Text(
             text = text,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.background,
+            fontWeight = FontWeight.SemiBold,
+            color = Success,
             maxLines = 1
         )
     }
