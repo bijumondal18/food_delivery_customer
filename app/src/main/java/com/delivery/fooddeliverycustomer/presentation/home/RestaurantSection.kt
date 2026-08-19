@@ -4,11 +4,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,13 +36,13 @@ fun RestaurantSection(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                horizontal = 16.dp,
+//                horizontal = 16.dp,
                 vertical = 12.dp
             )
     ) {
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -72,42 +76,41 @@ fun RestaurantSection(
         )
 
 
-        Column(
-            verticalArrangement = Arrangement.spacedBy(14.dp)
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(
+                horizontal = 12.dp
+            )
         ) {
 
-            restaurants
-                .chunked(2)
-                .forEach { rowRestaurants ->
+            items(
+                items = restaurants.chunked(2)
+            ) { columnRestaurants ->
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(fraction = 0.3f),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
 
-                        rowRestaurants.forEach { restaurant ->
+                    columnRestaurants.forEach { restaurant ->
 
-                            Box(
-                                modifier = Modifier.weight(1f)
-                            ) {
-                                RestaurantCard(
-                                    restaurant = restaurant,
-                                    onClick = {
-                                        onRestaurantClick(restaurant)
-                                    },
-                                    onFavouriteClick = {}
-                                )
-                            }
-                        }
+                        RestaurantCard(
+                            restaurant = restaurant,
+                            onClick = {
+                                onRestaurantClick(restaurant)
+                            },
+                            onFavouriteClick = {}
+                        )
+                    }
 
-                        // Fill remaining space if last row
-                        if (rowRestaurants.size == 1) {
-                            Spacer(
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
+                    // Keep the last column balanced
+                    if (columnRestaurants.size == 1) {
+                        Spacer(
+                            modifier = Modifier.height(1.dp)
+                        )
                     }
                 }
+            }
         }
     }
 }
