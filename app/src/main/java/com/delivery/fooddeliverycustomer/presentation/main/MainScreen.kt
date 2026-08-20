@@ -1,10 +1,6 @@
 package com.delivery.fooddeliverycustomer.presentation.main
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -16,7 +12,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -26,10 +21,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.delivery.fooddeliverycustomer.R
 import com.delivery.fooddeliverycustomer.presentation.cart.CartScreen
-import com.delivery.fooddeliverycustomer.presentation.home.HomeScreen
-import com.delivery.fooddeliverycustomer.presentation.home.HomeViewModel
-import com.delivery.fooddeliverycustomer.presentation.order.OrderScreen
-import com.delivery.fooddeliverycustomer.presentation.profile.ProfileScreen
+import com.delivery.fooddeliverycustomer.presentation.screens.home.HomeScreen
+import com.delivery.fooddeliverycustomer.presentation.screens.home.HomeViewModel
+import com.delivery.fooddeliverycustomer.presentation.screens.order.OrderScreen
+import com.delivery.fooddeliverycustomer.presentation.screens.profile.ProfileScreen
 
 private data class BottomNavItem(
     val route: String,

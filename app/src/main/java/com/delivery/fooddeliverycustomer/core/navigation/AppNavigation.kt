@@ -8,14 +8,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.delivery.fooddeliverycustomer.presentation.auth.login.LoginScreen
+import com.delivery.fooddeliverycustomer.presentation.screens.auth.login.LoginScreen
 import com.delivery.fooddeliverycustomer.presentation.cart.CartScreen
-import com.delivery.fooddeliverycustomer.presentation.home.HomeScreen
-import com.delivery.fooddeliverycustomer.presentation.home.HomeViewModel
-import com.delivery.fooddeliverycustomer.presentation.main.MainScreen
-import com.delivery.fooddeliverycustomer.presentation.order.OrderScreen
-import com.delivery.fooddeliverycustomer.presentation.profile.ProfileScreen
-import com.delivery.fooddeliverycustomer.presentation.splash.SplashScreen
+import com.delivery.fooddeliverycustomer.presentation.screens.home.HomeScreen
+import com.delivery.fooddeliverycustomer.presentation.screens.home.HomeViewModel
+import com.delivery.fooddeliverycustomer.presentation.screens.order.OrderScreen
+import com.delivery.fooddeliverycustomer.presentation.screens.profile.ProfileScreen
+import com.delivery.fooddeliverycustomer.presentation.screens.splash.SplashScreen
 
 @Composable
 fun AppNavigation() {

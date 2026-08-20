@@ -22,10 +22,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.delivery.fooddeliverycustomer" />
+                  <option name="mobileSdkAppId" value="1:484615716097:android:b356c08e949d36c86daf00" />
+                  <option name="projectId" value="khabo-63826" />
+                  <option name="projectNumber" value="484615716097" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
