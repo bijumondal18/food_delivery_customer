@@ -2,8 +2,6 @@ package com.delivery.fooddeliverycustomer.presentation.components.fields
 
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -18,6 +16,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.res.painterResource
+import com.delivery.fooddeliverycustomer.R
 
 @Composable
 fun PasswordField(
@@ -61,10 +61,10 @@ fun PasswordField(
                 }
             ) {
                 Icon(
-                    imageVector = if (passwordVisible) {
-                        Icons.Rounded.VisibilityOff
+                    painter = if (passwordVisible) {
+                        painterResource(R.drawable.visibility_off_24px)
                     } else {
-                        Icons.Rounded.Visibility
+                        painterResource(R.drawable.visibility_24px)
                     },
                     contentDescription = if (passwordVisible) {
                         "Hide password"
