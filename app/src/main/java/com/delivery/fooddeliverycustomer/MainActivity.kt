@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.delivery.fooddeliverycustomer.core.navigation.AppNavigation
-import com.delivery.fooddeliverycustomer.core.ui.theme.AppTheme
+import com.delivery.fooddeliverycustomer.core.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

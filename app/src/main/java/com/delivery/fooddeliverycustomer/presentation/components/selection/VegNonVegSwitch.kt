@@ -1,7 +1,7 @@
 package com.delivery.fooddeliverycustomer.presentation.components.selection
 
-import com.delivery.fooddeliverycustomer.core.ui.theme.LightTextSecondary
-import com.delivery.fooddeliverycustomer.core.ui.theme.Primary
+import com.delivery.fooddeliverycustomer.core.theme.LightTextSecondary
+import com.delivery.fooddeliverycustomer.core.theme.Primary
 
 
 import androidx.compose.foundation.background
@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.delivery.fooddeliverycustomer.core.ui.theme.LightBackground
+import com.delivery.fooddeliverycustomer.core.theme.LightBackground
 
 enum class FoodPreference {
     VEG,

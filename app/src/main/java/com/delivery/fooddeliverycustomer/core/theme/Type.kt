@@ -1,4 +1,4 @@
-package com.delivery.fooddeliverycustomer.core.ui.theme
+package com.delivery.fooddeliverycustomer.core.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

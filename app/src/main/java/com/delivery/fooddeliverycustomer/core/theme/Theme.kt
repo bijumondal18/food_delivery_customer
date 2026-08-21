@@ -1,7 +1,6 @@
-package com.delivery.fooddeliverycustomer.core.ui.theme
+package com.delivery.fooddeliverycustomer.core.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 
 import androidx.compose.material3.MaterialTheme
