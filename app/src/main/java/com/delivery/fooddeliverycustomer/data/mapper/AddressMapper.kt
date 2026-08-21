@@ -3,6 +3,8 @@ package com.delivery.fooddeliverycustomer.data.mapper
 
 import com.delivery.fooddeliverycustomer.data.local.entity.AddressEntity
 import com.delivery.fooddeliverycustomer.data.remote.dto.address.AddressDto
+import com.delivery.fooddeliverycustomer.data.remote.dto.address.CreateAddressRequestDto
+import com.delivery.fooddeliverycustomer.data.remote.dto.address.UpdateAddressRequestDto
 import com.delivery.fooddeliverycustomer.domain.model.location.Address
 import com.delivery.fooddeliverycustomer.domain.model.location.AddressLabel
 
@@ -90,6 +92,42 @@ fun Address.toDto(): AddressDto {
     return AddressDto(
         id = id,
         userId = userId,
+        label = label.name,
+        name = name,
+        phone = phone,
+        addressLine1 = addressLine1,
+        addressLine2 = addressLine2,
+        landmark = landmark,
+        city = city,
+        state = state,
+        country = country,
+        postalCode = postalCode,
+        latitude = latitude,
+        longitude = longitude,
+        isDefault = isDefault
+    )
+}
+
+fun Address.toCreateRequest(): CreateAddressRequestDto {
+    return CreateAddressRequestDto(
+        label = label.name,
+        name = name,
+        phone = phone,
+        addressLine1 = addressLine1,
+        addressLine2 = addressLine2,
+        landmark = landmark,
+        city = city,
+        state = state,
+        country = country,
+        postalCode = postalCode,
+        latitude = latitude,
+        longitude = longitude,
+        isDefault = isDefault
+    )
+}
+
+fun Address.toUpdateRequest(): UpdateAddressRequestDto {
+    return UpdateAddressRequestDto(
         label = label.name,
         name = name,
         phone = phone,

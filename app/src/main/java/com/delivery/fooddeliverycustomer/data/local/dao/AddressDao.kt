@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.delivery.fooddeliverycustomer.data.local.entity.AddressEntity
 import kotlinx.coroutines.flow.Flow
@@ -25,11 +26,29 @@ interface AddressDao {
         userId: String
     ): Flow<List<AddressEntity>>
 
+    @Query(
+        """
+        SELECT * FROM addresses
+        WHERE userId = :userId AND isDefault = 1
+        LIMIT 1
+    """
+    )
+    fun observeDefaultAddress(
+        userId: String
+    ): Flow<AddressEntity?>
+
     @Insert(
         onConflict = OnConflictStrategy.REPLACE
     )
     suspend fun insertAddress(
         address: AddressEntity
+    )
+
+    @Insert(
+        onConflict = OnConflictStrategy.REPLACE
+    )
+    suspend fun insertAddresses(
+        addresses: List<AddressEntity>
     )
 
     @Update
@@ -41,6 +60,25 @@ interface AddressDao {
     suspend fun deleteAddress(
         address: AddressEntity
     )
+
+    @Query("DELETE FROM addresses WHERE id = :id")
+    suspend fun deleteAddress(
+        id: String
+    )
+
+    @Query("DELETE FROM addresses WHERE userId = :userId")
+    suspend fun deleteAllAddressesByUserId(
+        userId: String
+    )
+
+    @Transaction
+    suspend fun replaceAddresses(
+        userId: String,
+        addresses: List<AddressEntity>
+    ) {
+        deleteAllAddressesByUserId(userId)
+        insertAddresses(addresses)
+    }
 
     @Query(
         """
