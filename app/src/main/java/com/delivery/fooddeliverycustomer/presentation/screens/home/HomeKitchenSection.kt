@@ -32,12 +32,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.delivery.fooddeliverycustomer.core.components.HomeKitchenCard
+import com.delivery.fooddeliverycustomer.core.theme.LightTextSecondary
 
 @Composable
 fun HomeKitchenSection(
     kitchens: List<com.delivery.fooddeliverycustomer.domain.model.HomeKitchen> = _root_ide_package_.com.delivery.fooddeliverycustomer.domain.model.homeKitchens,
-    onSeeAllClick: () -> Unit = {},
     onKitchenClick: (com.delivery.fooddeliverycustomer.domain.model.HomeKitchen) -> Unit = {}
 ) {
 
@@ -58,22 +59,15 @@ fun HomeKitchenSection(
         ) {
 
             Text(
-                text = "Nearby Home Kitchens",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
+                text = "Recommended With Deals".uppercase(),
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    letterSpacing = 1.8.sp
+                ),
+                fontWeight = FontWeight.SemiBold,
+                color = LightTextSecondary,
                 modifier = Modifier.weight(1f)
             )
 
-            Text(
-                text = "See All",
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable {
-                    onSeeAllClick()
-                }
-            )
         }
 
         Spacer(

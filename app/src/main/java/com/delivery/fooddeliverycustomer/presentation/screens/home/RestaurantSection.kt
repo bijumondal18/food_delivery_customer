@@ -22,7 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.delivery.fooddeliverycustomer.core.components.RestaurantCard
+import com.delivery.fooddeliverycustomer.core.theme.LightTextSecondary
 import com.delivery.fooddeliverycustomer.domain.model.restaurant.Restaurant
 
 @Composable
@@ -42,32 +44,20 @@ fun RestaurantSection(
     ) {
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             Text(
-                text = "Nearby Restaurants",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.weight(1f)
-            )
-
-            Text(
-                text = "See All",
-                style = MaterialTheme.typography.labelLarge,
+                text = "Nearby Restaurants".uppercase(),
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    letterSpacing = 1.8.sp
+                ),
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .clickable {
-                        onSeeAllClick()
-                    }
-                    .padding(
-                        horizontal = 8.dp,
-                        vertical = 6.dp
-                    )
+                color = LightTextSecondary,
+                modifier = Modifier.weight(1f)
             )
         }
 
@@ -101,6 +91,7 @@ fun RestaurantSection(
                             },
                             onFavouriteClick = {}
                         )
+
                     }
 
                     // Keep the last column balanced

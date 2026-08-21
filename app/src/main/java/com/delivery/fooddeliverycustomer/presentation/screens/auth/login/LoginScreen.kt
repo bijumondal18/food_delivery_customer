@@ -43,9 +43,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
-import com.delivery.fooddeliverycustomer.core.components.EmailField
-import com.delivery.fooddeliverycustomer.core.components.PasswordField
+import com.delivery.fooddeliverycustomer.core.theme.LightTextSecondary
 import com.delivery.fooddeliverycustomer.presentation.components.buttons.PrimaryButton
+import com.delivery.fooddeliverycustomer.presentation.components.fields.EmailField
+import com.delivery.fooddeliverycustomer.presentation.components.fields.PasswordField
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -200,21 +201,11 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.40f)
-                .clip(
-                    RoundedCornerShape(
-                        topStart = 28.dp,
-                        topEnd = 28.dp
-                    )
-                )
                 .background(
-                    MaterialTheme.colorScheme.surface
-                )
-                .verticalScroll(
-                    rememberScrollState()
+                    MaterialTheme.colorScheme.background
                 )
                 .imePadding()
                 .padding(
-                    horizontal = 20.dp,
                     vertical = 16.dp
                 ),
             verticalArrangement = Arrangement.Top,
@@ -222,18 +213,18 @@ fun LoginScreen(
         ) {
 
             Text(
-                text = "Login or Sign up",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
+                text = "Log in or sign up",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = LightTextSecondary
             )
 
             Spacer(
-                modifier = Modifier.height(16.dp)
+                modifier = Modifier.height(12.dp)
             )
 
-
             EmailField(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 value = state.email,
                 onValueChange = viewModel::onEmailChanged,
                 enabled = !state.isLoading
@@ -244,6 +235,7 @@ fun LoginScreen(
             )
 
             PasswordField(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 value = state.password,
                 onValueChange = viewModel::onPasswordChanged,
                 enabled = !state.isLoading
@@ -271,6 +263,7 @@ fun LoginScreen(
             )
 
             PrimaryButton(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 text = "Login",
                 onClick = viewModel::login,
                 isLoading = state.isLoading

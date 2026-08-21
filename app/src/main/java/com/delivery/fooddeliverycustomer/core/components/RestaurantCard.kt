@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -49,6 +50,7 @@ import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.core.theme.LightForeground
 import com.delivery.fooddeliverycustomer.core.theme.Success
 import com.delivery.fooddeliverycustomer.domain.model.restaurant.Restaurant
+import com.delivery.fooddeliverycustomer.presentation.components.cards.AppCard
 
 @Composable
  fun RestaurantCard(
@@ -57,19 +59,15 @@ import com.delivery.fooddeliverycustomer.domain.model.restaurant.Restaurant
     onFavouriteClick: () -> Unit
 ) {
 
-    Card(
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val cardWidth = screenWidth * 0.40f
+
+    AppCard (
         modifier = Modifier
-            .fillMaxWidth()
+            .width(cardWidth)
             .clip(RoundedCornerShape(14.dp))
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(14.dp),
-        border = BorderStroke(width = 0.5.dp, color = MaterialTheme.colorScheme.outline),
-        colors = CardDefaults.cardColors(
-            containerColor = LightForeground
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
     ) {
 
         Column {
@@ -89,34 +87,34 @@ import com.delivery.fooddeliverycustomer.domain.model.restaurant.Restaurant
                 )
 
                 // Favourite button
-                IconButton(
-                    onClick = onFavouriteClick,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(20.dp)
-                        .size(24.dp)
-                        .clip(CircleShape)
-                        .background(
-                            MaterialTheme.colorScheme.onBackground.copy(
-                                alpha = 0.7f
-                            )
-                        )
-                ) {
-
-//                    Icon(
-//                        imageVector = if (restaurant.isFavourite) {
-//                            Icons.Default.Favorite
-//                        } else {
-//                            Icons.Default.FavoriteBorder
-//                        },
-//                        contentDescription = "Favourite",
-//                        tint = if (restaurant.isFavourite) {
-//                            MaterialTheme.colorScheme.error
-//                        } else {
-//                            MaterialTheme.colorScheme.error
-//                        }
-//                    )
-                }
+//                IconButton(
+//                    onClick = onFavouriteClick,
+//                    modifier = Modifier
+//                        .align(Alignment.TopEnd)
+//                        .padding(10.dp)
+//                        .size(24.dp)
+//                        .clip(CircleShape)
+//                        .background(
+//                            MaterialTheme.colorScheme.onBackground.copy(
+//                                alpha = 0.7f
+//                            )
+//                        )
+//                ) {
+//
+////                    Icon(
+////                        imageVector = if (restaurant.isFavourite) {
+////                            Icons.Default.Favorite
+////                        } else {
+////                            Icons.Default.FavoriteBorder
+////                        },
+////                        contentDescription = "Favourite",
+////                        tint = if (restaurant.isFavourite) {
+////                            MaterialTheme.colorScheme.error
+////                        } else {
+////                            MaterialTheme.colorScheme.error
+////                        }
+////                    )
+//                }
             }
 
             AnimatedGreenDivider(

@@ -334,13 +334,9 @@ fun HomeScreen(
                 }
             }
 
-            // Nearby Home Kitchens
+            // Recommended With Deals Section
             item {
                 HomeKitchenSection(
-                    onSeeAllClick = {
-                        // Navigate to all home kitchens
-                    },
-
                     onKitchenClick = { kitchen ->
                         // Navigate to home kitchen details
                     }
