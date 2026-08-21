@@ -1,12 +1,7 @@
 package com.delivery.fooddeliverycustomer.presentation.widgets
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -21,11 +16,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,7 +39,9 @@ import com.delivery.fooddeliverycustomer.R
 import com.delivery.fooddeliverycustomer.core.theme.Success
 import com.delivery.fooddeliverycustomer.domain.model.restaurant.Restaurant
 import com.delivery.fooddeliverycustomer.presentation.components.cards.AppCard
+import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AllRestaurantCard(
     restaurant: Restaurant,
@@ -55,22 +55,57 @@ fun AllRestaurantCard(
 
     val isPressed by interactionSource.collectIsPressedAsState()
 
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) {
-            0.96f
-        } else {
-            1f
-        },
-        animationSpec = spring(
+    val scale by androidx.compose.animation.core.animateFloatAsState(
+        targetValue = if (isPressed) 0.96f else 1f,
+        animationSpec = androidx.compose.animation.core.spring(
             dampingRatio = 0.65f,
             stiffness = 500f
         ),
         label = "restaurant_bounce"
     )
 
+    /*
+     * Keep the pager state local to this restaurant.
+     *
+     * The initial page is always 0.
+     */
+    val images = restaurant.images
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = {
+            images.size
+        }
+    )
+
+    // ================================================================
+    // AUTO SLIDE
+    // ================================================================
+
+    if (images.size > 1) {
+
+        LaunchedEffect(
+            restaurant.id,
+            images.size
+        ) {
+
+            while (true) {
+
+                delay(3000L)
+
+                val nextPage =
+                    (pagerState.currentPage + 1) % images.size
+
+                pagerState.animateScrollToPage(
+                    page = nextPage
+                )
+            }
+        }
+    }
+
     AppCard(
         modifier = Modifier
-            .fillMaxWidth().padding(horizontal = 12.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp)
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale
@@ -85,7 +120,7 @@ fun AllRestaurantCard(
         Column {
 
             // ========================================================
-            // IMAGE
+            // IMAGE SLIDER
             // ========================================================
 
             Box(
@@ -94,15 +129,86 @@ fun AllRestaurantCard(
                     .height(210.dp)
             ) {
 
-                AsyncImage(
-                    model = restaurant.images.firstOrNull(),
+                if (images.isNotEmpty()) {
 
-                    contentDescription = restaurant.name,
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier.fillMaxSize()
+                    ) { page ->
 
-                    contentScale = ContentScale.Crop,
+                        AsyncImage(
+                            model = images[page],
+                            contentDescription = restaurant.name,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
 
-                    modifier = Modifier.fillMaxSize()
-                )
+                    // =================================================
+                    // PAGE INDICATOR
+                    // =================================================
+
+                    if (images.size > 1) {
+
+                        Row(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(bottom = 10.dp, end = 10.dp),
+                            horizontalArrangement = Arrangement.spacedBy(
+                                5.dp
+                            ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            images.forEachIndexed { index, _ ->
+
+                                val isSelected =
+                                    pagerState.currentPage == index
+
+                                Box(
+                                    modifier = Modifier
+                                        .size(
+                                            width = if (isSelected) {
+                                                16.dp
+                                            } else {
+                                                6.dp
+                                            },
+                                            height = 6.dp
+                                        )
+                                        .graphicsLayer {
+                                            alpha = if (isSelected) {
+                                                1f
+                                            } else {
+                                                0.7f
+                                            }
+                                        }
+                                        .background(
+                                            color = androidx.compose.ui.graphics.Color.White,
+                                            shape = CircleShape
+                                        )
+                                )
+                            }
+                        }
+                    }
+
+                } else {
+
+                    // =================================================
+                    // FALLBACK
+                    // =================================================
+
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Text(
+                            text = "No image",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             }
 
             // ========================================================

@@ -215,7 +215,8 @@ object RestaurantMockData {
             name = "Bengal Kitchen",
             description = "Homestyle Bengali food with authentic traditional recipes.",
             images = listOf(
-                "https://images.unsplash.com/photo-1601050690597-df0568f70950"
+                "https://images.unsplash.com/photo-1601050690597-df0568f70950",
+                "https://images.unsplash.com/photo-1540420773420-3366772f4999"
             ),
             logo = "https://images.unsplash.com/photo-1547592180-85f173990554",
             cuisines = listOf("Bengali", "Indian", "Thali"),
@@ -234,7 +235,8 @@ object RestaurantMockData {
             name = "Rolls & More",
             description = "Kolkata-style rolls, wraps and quick bites.",
             images = listOf(
-                "https://images.unsplash.com/photo-1626700051175-6818013e1d4f"
+                "https://images.unsplash.com/photo-1626700051175-6818013e1d4f",
+                "https://images.unsplash.com/photo-1540420773420-3366772f4999"
             ),
             logo = "https://images.unsplash.com/photo-1565299507177-b0ac66763828",
             cuisines = listOf("Rolls", "Fast Food", "Street Food"),
@@ -272,7 +274,8 @@ object RestaurantMockData {
             name = "Spice Route",
             description = "Flavourful Indian and Mughlai dishes for every occasion.",
             images = listOf(
-                "https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7"
+                "https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7",
+                "https://images.unsplash.com/photo-1540420773420-3366772f4999"
             ),
             logo = "https://images.unsplash.com/photo-1552566626-52f8b828add9",
             cuisines = listOf("Indian", "Mughlai", "North Indian"),

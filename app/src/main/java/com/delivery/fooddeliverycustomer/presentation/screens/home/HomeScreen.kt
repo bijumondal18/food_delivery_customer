@@ -237,7 +237,6 @@ fun HomeScreen(
                         restaurant.id
                     )
                 },
-
                 onFavouriteClick = {}
             )
 
