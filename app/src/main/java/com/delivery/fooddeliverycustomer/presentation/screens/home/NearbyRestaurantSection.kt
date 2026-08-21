@@ -62,7 +62,7 @@ fun NearbyRestaurantSection(
         )
 
         Spacer(
-            modifier = Modifier.height(12.dp)
+            modifier = Modifier.height(20.dp)
         )
 
         // ------------------------------------------------------------

@@ -409,7 +409,7 @@ private fun AllRestaurantHeader() {
             .fillMaxWidth()
             .padding(
                 horizontal = 12.dp,
-                vertical = 12.dp
+                vertical = 16.dp
             )
     ) {
 
