@@ -41,11 +41,13 @@ interface FoodItemDao {
     @Query(
         """
         SELECT * FROM food_items
-        WHERE name LIKE '%' || :query || '%'
+        WHERE restaurantId = :restaurantId
+        AND name LIKE '%' || :query || '%'
         AND isAvailable = 1
     """
     )
     fun searchFood(
+        restaurantId: String,
         query: String
     ): Flow<List<FoodItemEntity>>
 

@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import kotlin.collections.map
+import com.delivery.fooddeliverycustomer.data.mapper.toDomain
+import com.delivery.fooddeliverycustomer.data.mapper.toEntity
+import kotlinx.coroutines.flow.map
 
 class RestaurantRepositoryImpl @Inject constructor(
     private val dao: RestaurantDao,
@@ -24,9 +27,7 @@ class RestaurantRepositoryImpl @Inject constructor(
             .map { entities ->
 
                 Resource.Success(
-                    entities.map {
-                        it.toDomain()
-                    }
+                    entities.map { it.toDomain() }
                 )
             }
     }
@@ -52,22 +53,29 @@ class RestaurantRepositoryImpl @Inject constructor(
             .map { entities ->
 
                 Resource.Success(
-                    entities.map {
-                        it.toDomain()
-                    }
+                    entities.map { it.toDomain() }
                 )
             }
     }
 
+//    override fun observeFavouriteRestaurants():
+//            Flow<Resource<List<Restaurant>>> {
+//
+//        return dao.observeFavouriteRestaurants()
+//            .map { entities ->
+//
+//                Resource.Success(
+//                    entities.map { it.toDomain() }
+//                )
+//            }
+//    }
+
     override suspend fun refreshRestaurants() {
 
-        val response =
-            api.getRestaurants()
+        val response = api.getRestaurants()
 
         dao.insertRestaurants(
-            response.map {
-                it.toEntity()
-            }
+            response.map { it.toEntity() }
         )
     }
 }

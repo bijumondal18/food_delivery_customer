@@ -6,8 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface RestaurantRepository {
 
-    fun observeRestaurants():
-            Flow<Resource<List<Restaurant>>>
+    fun observeRestaurants(): Flow<Resource<List<Restaurant>>>
 
     fun observeRestaurant(
         id: String
@@ -16,6 +15,9 @@ interface RestaurantRepository {
     fun searchRestaurants(
         query: String
     ): Flow<Resource<List<Restaurant>>>
+
+//    fun observeFavouriteRestaurants():
+//            Flow<Resource<List<Restaurant>>>
 
     suspend fun refreshRestaurants()
 }
