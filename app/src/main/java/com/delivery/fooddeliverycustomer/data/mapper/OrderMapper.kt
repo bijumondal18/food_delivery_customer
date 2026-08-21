@@ -11,6 +11,8 @@ import com.google.gson.reflect.TypeToken
 
 private val gson = Gson()
 
+fun OrderDto.toDomain(): Order = toEntity().toDomain()
+
 fun OrderDto.toEntity(): OrderEntity {
     return OrderEntity(
         id = id,

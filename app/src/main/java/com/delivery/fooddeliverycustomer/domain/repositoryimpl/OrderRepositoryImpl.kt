@@ -120,7 +120,7 @@ class OrderRepositoryImpl @Inject constructor(
             val response =
                 api.getOrders()
 
-            dao.replaceOrders(
+            dao.insertOrders(
                 response.map { it.toEntity() }
             )
         } catch (e: Exception) {

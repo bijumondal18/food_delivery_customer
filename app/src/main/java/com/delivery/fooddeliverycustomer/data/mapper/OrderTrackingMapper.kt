@@ -10,6 +10,8 @@ import com.google.gson.reflect.TypeToken
 
 private val trackingGson = Gson()
 
+fun OrderTrackingDto.toDomain(): OrderTracking = toEntity().toDomain()
+
 fun OrderTrackingDto.toEntity(): OrderTrackingEntity {
     return OrderTrackingEntity(
         orderId = orderId,
