@@ -48,6 +48,7 @@ import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
 import com.delivery.fooddeliverycustomer.core.theme.Success
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -84,11 +85,11 @@ fun HomeKitchenCard(
 
             // Show distance first
             showDeliveryTime = false
-            delay(2500)
+            delay(2500.milliseconds)
 
             // Then show delivery time
             showDeliveryTime = true
-            delay(2500)
+            delay(2500.milliseconds)
         }
     }
 
@@ -114,7 +115,7 @@ fun HomeKitchenCard(
                         }
 
                         // Give the bounce animation time to be visible
-                        delay(100)
+                        delay(100.milliseconds)
 
                         onClick()
                     }
@@ -226,9 +227,9 @@ fun HomeKitchenCard(
                     )
                 } else {
                     slideInVertically(
-                        initialOffsetY = { -it }
+                        initialOffsetY = { it }
                     ) togetherWith slideOutVertically(
-                        targetOffsetY = { it }
+                        targetOffsetY = { -it }
                     )
                 }.using(
                     SizeTransform(clip = true)
