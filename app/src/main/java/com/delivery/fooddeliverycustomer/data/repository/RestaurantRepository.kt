@@ -1,7 +1,7 @@
 package com.delivery.fooddeliverycustomer.data.repository
 
 import com.delivery.fooddeliverycustomer.core.common.Resource
-import com.delivery.fooddeliverycustomer.domain.model.Restaurant
+import com.delivery.fooddeliverycustomer.domain.model.restaurant.Restaurant
 import kotlinx.coroutines.flow.Flow
 
 interface RestaurantRepository {

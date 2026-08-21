@@ -30,6 +30,20 @@ data class Restaurant(
     val updatedAt: Long = 0L
 )
 
+data class Offer(
+    val title: String,
+    val description: String? = null,
+    val discountType: DiscountType,
+    val discountValue: Double,
+    val maximumDiscount: Double? = null,
+    val minimumOrderAmount: Double? = null
+)
+
+enum class DiscountType {
+    PERCENTAGE,
+    FIXED_AMOUNT
+}
+
 data class FoodCategory(
     val id: String = "",
     val restaurantId: String = "",

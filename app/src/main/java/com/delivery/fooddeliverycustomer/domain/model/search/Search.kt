@@ -1,11 +1,11 @@
 package com.delivery.fooddeliverycustomer.domain.model.search
 
-import com.delivery.fooddeliverycustomer.domain.model.Restaurant
 import com.delivery.fooddeliverycustomer.domain.model.restaurant.FoodItem
+import com.delivery.fooddeliverycustomer.domain.model.restaurant.Restaurant
 
 data class SearchResult(
-    val restaurants: List<com.delivery.fooddeliverycustomer.domain.model.Restaurant> = emptyList(),
-    val foodItems: List<com.delivery.fooddeliverycustomer.domain.model.restaurant.FoodItem> = emptyList()
+    val restaurants: List<Restaurant> = emptyList(),
+    val foodItems: List<FoodItem> = emptyList()
 )
 
 data class SearchHistory(

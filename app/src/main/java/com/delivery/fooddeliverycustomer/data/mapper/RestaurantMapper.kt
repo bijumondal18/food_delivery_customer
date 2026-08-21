@@ -40,16 +40,14 @@ fun RestaurantDto.toEntity(): RestaurantEntity {
     )
 }
 
-fun RestaurantDto.toDomain(): Restaurant {
+fun RestaurantEntity.toDomain(): Restaurant {
 
     return Restaurant(
         id = id,
         name = name,
         description = description.orEmpty(),
         logo = logo,
-        images = images
-            .sortedBy { it.sortOrder }
-            .map { it.url },
+        images = images,
         cuisines = cuisines,
         rating = rating,
         totalRatings = totalRatings,

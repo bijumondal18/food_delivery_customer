@@ -23,13 +23,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.delivery.fooddeliverycustomer.core.components.RestaurantCard
-import com.delivery.fooddeliverycustomer.domain.model.Restaurant
+import com.delivery.fooddeliverycustomer.domain.model.restaurant.Restaurant
 
 @Composable
 fun RestaurantSection(
-    restaurants: List<com.delivery.fooddeliverycustomer.domain.model.Restaurant>,
+    restaurants: List<Restaurant>,
     onSeeAllClick: () -> Unit,
-    onRestaurantClick: (com.delivery.fooddeliverycustomer.domain.model.Restaurant) -> Unit
+    onRestaurantClick: (Restaurant) -> Unit
 ) {
 
     Column(

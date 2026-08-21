@@ -98,7 +98,7 @@ import kotlin.io.path.moveTo
             ) {
 
                 AsyncImage(
-                    model = restaurant.imageUrl,
+                    model = restaurant.logo,
                     contentDescription = restaurant.name,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
@@ -119,19 +119,19 @@ import kotlin.io.path.moveTo
                         )
                 ) {
 
-                    Icon(
-                        imageVector = if (restaurant.isFavourite) {
-                            Icons.Default.Favorite
-                        } else {
-                            Icons.Default.FavoriteBorder
-                        },
-                        contentDescription = "Favourite",
-                        tint = if (restaurant.isFavourite) {
-                            MaterialTheme.colorScheme.error
-                        } else {
-                            MaterialTheme.colorScheme.error
-                        }
-                    )
+//                    Icon(
+//                        imageVector = if (restaurant.isFavourite) {
+//                            Icons.Default.Favorite
+//                        } else {
+//                            Icons.Default.FavoriteBorder
+//                        },
+//                        contentDescription = "Favourite",
+//                        tint = if (restaurant.isFavourite) {
+//                            MaterialTheme.colorScheme.error
+//                        } else {
+//                            MaterialTheme.colorScheme.error
+//                        }
+//                    )
                 }
             }
 
@@ -157,30 +157,24 @@ import kotlin.io.path.moveTo
                 )
 
                 // Restaurant information
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    // Distance
-                    RestaurantInfoItem(
-                        icon = R.drawable.location_on_24px,
-                        text = restaurant.distance
-                    )
-
-                    // Offer
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//
+//                    // Distance
 //                    RestaurantInfoItem(
-//                        icon = R.drawable.percent_discount_24px,
-//                        text = restaurant.offer
+//                        icon = R.drawable.location_on_24px,
+//                        text = restaurant.distance
 //                    )
-
-                    // Delivery time
-                    RestaurantInfoItem(
-                        icon = R.drawable.nest_clock_farsight_analog_24px,
-                        text = restaurant.deliveryTime
-                    )
-                }
+//
+//                    // Delivery time
+//                    RestaurantInfoItem(
+//                        icon = R.drawable.nest_clock_farsight_analog_24px,
+//                        text = restaurant.deliveryTime
+//                    )
+//                }
             }
         }
     }
@@ -219,7 +213,7 @@ fun AllRestaurantCard(
             ) {
 
                 AsyncImage(
-                    model = restaurant.imageUrl,
+                    model = restaurant.logo,
                     contentDescription = restaurant.name,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
@@ -240,19 +234,19 @@ fun AllRestaurantCard(
                         )
                 ) {
 
-                    Icon(
-                        imageVector = if (restaurant.isFavourite) {
-                            Icons.Default.Favorite
-                        } else {
-                            Icons.Default.FavoriteBorder
-                        },
-                        contentDescription = "Favourite",
-                        tint = if (restaurant.isFavourite) {
-                            MaterialTheme.colorScheme.error
-                        } else {
-                            MaterialTheme.colorScheme.error
-                        }
-                    )
+//                    Icon(
+//                        imageVector = if (restaurant.isFavourite) {
+//                            Icons.Default.Favorite
+//                        } else {
+//                            Icons.Default.FavoriteBorder
+//                        },
+//                        contentDescription = "Favourite",
+//                        tint = if (restaurant.isFavourite) {
+//                            MaterialTheme.colorScheme.error
+//                        } else {
+//                            MaterialTheme.colorScheme.error
+//                        }
+//                    )
                 }
             }
 
@@ -282,22 +276,22 @@ fun AllRestaurantCard(
                 ) {
 
                     // Distance
-                    RestaurantInfoItem(
-                        icon = R.drawable.location_on_24px,
-                        text = restaurant.distance
-                    )
-
-                    // Offer
 //                    RestaurantInfoItem(
-//                        icon = R.drawable.percent_discount_24px,
-//                        text = restaurant.offer
+//                        icon = R.drawable.location_on_24px,
+//                        text = restaurant.distance
 //                    )
-
-                    // Delivery time
-                    RestaurantInfoItem(
-                        icon = R.drawable.nest_clock_farsight_analog_24px,
-                        text = restaurant.deliveryTime
-                    )
+//
+//                    // Offer
+////                    RestaurantInfoItem(
+////                        icon = R.drawable.percent_discount_24px,
+////                        text = restaurant.offer
+////                    )
+//
+//                    // Delivery time
+//                    RestaurantInfoItem(
+//                        icon = R.drawable.nest_clock_farsight_analog_24px,
+//                        text = restaurant.deliveryTime
+//                    )
                 }
             }
         }

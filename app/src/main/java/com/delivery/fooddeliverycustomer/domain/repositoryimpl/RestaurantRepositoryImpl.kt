@@ -6,7 +6,7 @@ import com.delivery.fooddeliverycustomer.data.mapper.toDomain
 import com.delivery.fooddeliverycustomer.data.mapper.toEntity
 import com.delivery.fooddeliverycustomer.data.remote.api.RestaurantApi
 import com.delivery.fooddeliverycustomer.data.repository.RestaurantRepository
-import com.delivery.fooddeliverycustomer.domain.model.Restaurant
+import com.delivery.fooddeliverycustomer.domain.model.restaurant.Restaurant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
