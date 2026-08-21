@@ -137,7 +137,7 @@ fun HomeScreen(
                             0.dp
                         }
                     ) {
-
+                        // SearchBar
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -184,14 +184,12 @@ fun HomeScreen(
                         }
                     }
 
-
                     // Categories
-
                     CategorySection(
                         categories = foodCategories,
                         selectedCategory = selectedCategory,
                         onSeeAllClick = {},
-                        onCategoryClick = {category ->
+                        onCategoryClick = { category ->
                             selectedCategory =
                                 category?.name ?: "All"
                         }
@@ -216,34 +214,37 @@ fun HomeScreen(
                 )
             }
 
-            item{
+            item {
                 HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp),
                     thickness = 0.5.dp,
                     color = MaterialTheme.colorScheme.outlineVariant
                 )
             }
 
-            // Popular Restaurants
+            // Nearby Restaurants
             item {
                 NearbyRestaurantSection(
                     restaurants = RestaurantMockData.recommendedRestaurants,
-                    onSeeAllClick = {},
                     onRestaurantClick = {}
                 )
             }
 
-            item{
+            item {
                 HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
                     thickness = 0.5.dp,
                     color = MaterialTheme.colorScheme.outlineVariant
                 )
             }
 
             item {
-                AllRestaurantSection (
-                    restaurants =RestaurantMockData.nearbyRestaurants,
+                AllRestaurantSection(
+                    restaurants = RestaurantMockData.nearbyRestaurants,
                     onRestaurantClick = {}
                 )
             }
