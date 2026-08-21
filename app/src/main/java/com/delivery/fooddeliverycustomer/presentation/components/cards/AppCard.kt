@@ -24,7 +24,7 @@ fun AppCard(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
+            defaultElevation = 0.1.dp
         ),
         border = BorderStroke(
             width = 1.dp,

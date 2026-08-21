@@ -177,12 +177,9 @@ fun HomeScreen(
         item(
             key = "nearby_section"
         ) {
-
             NearbyRestaurantSection(
                 restaurants = RestaurantMockData.nearbyRestaurants,
-
                 onRestaurantClick = { restaurant ->
-
                     onRestaurantClick(
                         restaurant.id
                     )
@@ -384,10 +381,7 @@ private fun HomeSearchAndCategoryHeader(
                 onCategoryClick = onCategoryClick
             )
 
-            HorizontalDivider(
-                thickness = 0.5.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
+            HomeDivider()
         }
     }
 }
@@ -420,7 +414,7 @@ private fun AllRestaurantHeader() {
     ) {
 
         Text(
-            text = "ALL RESTAURANTS",
+            text = "${RestaurantMockData.nearbyRestaurants.size} RESTAURANTS SERVES TO YOU",
             style = MaterialTheme.typography.bodyMedium.copy(
                 letterSpacing = 1.8.sp
             ),

@@ -73,13 +73,11 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun RestaurantCard(
+    modifier: Modifier = Modifier,
     restaurant: Restaurant,
     onClick: () -> Unit,
     onFavouriteClick: () -> Unit
 ) {
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val cardWidth = screenWidth * 0.40f
 
     val interactionSource = remember {
         MutableInteractionSource()
@@ -134,7 +132,6 @@ fun RestaurantCard(
 
     AppCard(
         modifier = Modifier
-            .width(cardWidth)
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale
