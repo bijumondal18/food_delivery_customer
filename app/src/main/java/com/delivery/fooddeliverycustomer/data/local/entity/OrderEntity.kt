@@ -26,6 +26,10 @@ data class OrderEntity(
 
     val restaurantImage: String?,
 
+    val itemsJson: String,
+
+    val deliveryAddressJson: String?,
+
     val subtotal: Double,
 
     val deliveryFee: Double,

@@ -1,6 +1,6 @@
-package com.delivery.fooddeliverycustomer.data.remote.dto.order
+package com.delivery.fooddeliverycustomer.domain.model.order
 
-data class CreateOrderRequestDto(
+data class CreateOrderRequest(
     val restaurantId: String,
     val addressId: String,
     val paymentMethod: String,

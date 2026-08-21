@@ -1,6 +1,6 @@
-package com.delivery.fooddeliverycustomer.data.remote.dto.order
+package com.delivery.fooddeliverycustomer.domain.model.order
 
-data class OrderItemDto(
+data class OrderItem(
     val id: String = "",
     val foodItemId: String = "",
 
@@ -10,7 +10,7 @@ data class OrderItemDto(
     val price: Double = 0.0,
     val quantity: Int = 1,
 
-//    val customizations: List<SelectedCustomizationDto> = emptyList(),
+    val customizations: List<com.delivery.fooddeliverycustomer.domain.model.cart.SelectedCustomization> = emptyList(),
 
     val totalPrice: Double = 0.0
 )

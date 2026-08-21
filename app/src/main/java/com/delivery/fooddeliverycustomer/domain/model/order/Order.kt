@@ -27,9 +27,9 @@ data class Order(
     val restaurantName: String = "",
     val restaurantImage: String? = null,
 
-    val items: List<com.delivery.fooddeliverycustomer.domain.model.order.OrderItem> = emptyList(),
+    val items: List<OrderItem> = emptyList(),
 
-    val deliveryAddress: com.delivery.fooddeliverycustomer.domain.model.location.Address? = null,
+    val deliveryAddress: Address? = null,
 
     val subtotal: Double = 0.0,
     val deliveryFee: Double = 0.0,
@@ -50,19 +50,4 @@ data class Order(
 
     val createdAt: Long = 0L,
     val updatedAt: Long = 0L
-)
-
-data class OrderItem(
-    val id: String = "",
-    val foodItemId: String = "",
-
-    val name: String = "",
-    val image: String? = null,
-
-    val price: Double = 0.0,
-    val quantity: Int = 1,
-
-    val customizations: List<com.delivery.fooddeliverycustomer.domain.model.cart.SelectedCustomization> = emptyList(),
-
-    val totalPrice: Double = 0.0
 )

@@ -46,15 +46,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.delivery.fooddeliverycustomer.R
+import com.delivery.fooddeliverycustomer.domain.model.order.Order
 
-data class Order(
-    val restaurantName: String,
-    val orderId: String,
-    val date: String,
-    val items: String,
-    val amount: String,
-    val status: String
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -280,17 +273,17 @@ private fun OrderCard(
                         fontWeight = FontWeight.Bold
                     )
 
-                    Text(
-                        text = order.date,
-                        style =
-                            MaterialTheme.typography.bodySmall,
-                        color =
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+//                    Text(
+//                        text = order.updatedAt,
+//                        style =
+//                            MaterialTheme.typography.bodySmall,
+//                        color =
+//                            MaterialTheme.colorScheme.onSurfaceVariant
+//                    )
                 }
 
                 StatusBadge(
-                    status = order.status
+                    status = order.orderStatus.name
                 )
             }
 
@@ -298,10 +291,10 @@ private fun OrderCard(
                 modifier = Modifier.height(14.dp)
             )
 
-            Text(
-                text = order.items,
-                style = MaterialTheme.typography.bodyMedium
-            )
+//            Text(
+//                text = order.items,
+//                style = MaterialTheme.typography.bodyMedium
+//            )
 
             Spacer(
                 modifier = Modifier.height(12.dp)
@@ -314,18 +307,18 @@ private fun OrderCard(
             ) {
 
                 Text(
-                    text = "Order #${order.orderId}",
+                    text = "Order #${order.id}",
                     style =
                         MaterialTheme.typography.bodySmall,
                     color =
                         MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                Text(
-                    text = order.amount,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
+//                Text(
+//                    text = order.totalAmount,
+//                    fontWeight = FontWeight.Bold,
+//                    color = MaterialTheme.colorScheme.primary
+//                )
             }
         }
     }
