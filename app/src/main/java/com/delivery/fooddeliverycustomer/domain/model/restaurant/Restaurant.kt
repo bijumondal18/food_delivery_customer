@@ -22,9 +22,9 @@ data class Restaurant(
     val isPureVeg: Boolean = false,
     val isPromoted: Boolean = false,
 
-    val address: com.delivery.fooddeliverycustomer.domain.model.location.Address? = null,
+    val address: Address? = null,
 
-    val categories: List<com.delivery.fooddeliverycustomer.domain.model.restaurant.FoodCategory> = emptyList(),
+    val categories: List<FoodCategory> = emptyList(),
 
     val createdAt: Long = 0L,
     val updatedAt: Long = 0L

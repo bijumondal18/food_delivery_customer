@@ -4,7 +4,7 @@ data class Address(
     val id: String = "",
     val userId: String = "",
 
-    val label: com.delivery.fooddeliverycustomer.domain.model.location.AddressLabel = _root_ide_package_.com.delivery.fooddeliverycustomer.domain.model.location.AddressLabel.HOME,
+    val label: AddressLabel = AddressLabel.HOME,
 
     val name: String = "",
     val phone: String = "",

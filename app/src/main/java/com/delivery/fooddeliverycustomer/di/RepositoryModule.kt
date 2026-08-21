@@ -1,21 +1,23 @@
-//package com.delivery.fooddeliverycustomer.di
-//
-//import dagger.Binds
-//import dagger.Module
-//import dagger.hilt.InstallIn
-//import dagger.hilt.components.SingletonComponent
-//import javax.inject.Singleton
-//
-//@Module
-//@InstallIn(SingletonComponent::class)
-//abstract class RepositoryModule {
-//
-//    @Binds
-//    @Singleton
-//    abstract fun bindRestaurantRepository(
-//        implementation: RestaurantRepositoryImpl
-//    ): RestaurantRepository
-//
+package com.delivery.fooddeliverycustomer.di
+
+import com.delivery.fooddeliverycustomer.data.repository.RestaurantRepository
+import com.delivery.fooddeliverycustomer.domain.repositoryimpl.RestaurantRepositoryImpl
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindRestaurantRepository(
+        implementation: RestaurantRepositoryImpl
+    ): RestaurantRepository
+
 //    @Binds
 //    @Singleton
 //    abstract fun bindCartRepository(
@@ -39,4 +41,4 @@
 //    abstract fun bindFavoriteRepository(
 //        implementation: FavoriteRepositoryImpl
 //    ): FavoriteRepository
-//}
+}
