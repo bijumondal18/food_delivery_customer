@@ -104,7 +104,8 @@ fun AppNavigation() {
                     navController.navigate(
                         NavRoutes.Profile.route
                     )
-                }
+                },
+                onRestaurantClick = {}
             )
         }
 

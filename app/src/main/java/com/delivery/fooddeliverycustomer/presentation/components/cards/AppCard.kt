@@ -3,6 +3,7 @@ package com.delivery.fooddeliverycustomer.presentation.components.cards
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,31 +18,22 @@ import com.delivery.fooddeliverycustomer.core.theme.LightBorder
 @Composable
 fun AppCard(
     modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     Card(
-        modifier = modifier
-            .then(
-                if (onClick != null) {
-                    Modifier.clickable { onClick() }
-                } else {
-                    Modifier
-                }
-            ),
+        modifier = modifier,
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.5.dp
+            defaultElevation = 1.dp
         ),
-        border = BorderStroke(width = 1.dp, color = LightBorder),
+        border = BorderStroke(
+            width = 1.dp,
+            color = LightBorder
+        ),
         colors = CardDefaults.cardColors(
             containerColor = LightBackground
         )
     ) {
-        Column(
-            modifier = Modifier
-        ) {
-            content()
-        }
+        content()
     }
 }

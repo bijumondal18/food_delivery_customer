@@ -1,4 +1,4 @@
-package com.delivery.fooddeliverycustomer.core.components
+package com.delivery.fooddeliverycustomer.presentation.widgets
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
