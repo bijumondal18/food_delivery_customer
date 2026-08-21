@@ -28,6 +28,31 @@ interface CartDao {
         userId: String
     ): Flow<CartEntity?>
 
+    @Transaction
+    @Query(
+        """
+        SELECT * FROM carts
+        WHERE userId = :userId
+        LIMIT 1
+    """
+    )
+    suspend fun getCart(
+        userId: String
+    ): CartEntity?
+
+    @Query(
+        """
+        SELECT * FROM cart_items
+        WHERE cartId = :cartId
+        AND foodItemId = :foodItemId
+        LIMIT 1
+    """
+    )
+    suspend fun getCartItem(
+        cartId: String,
+        foodItemId: String
+    ): CartItemEntity?
+
     @Query(
         """
         SELECT * FROM cart_items
