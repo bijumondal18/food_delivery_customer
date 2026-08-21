@@ -227,7 +227,7 @@ fun HomeScreen(
             // Nearby Restaurants
             item {
                 NearbyRestaurantSection(
-                    restaurants = RestaurantMockData.recommendedRestaurants,
+                    restaurants = RestaurantMockData.nearbyRestaurants,
                     onRestaurantClick = {}
                 )
             }
