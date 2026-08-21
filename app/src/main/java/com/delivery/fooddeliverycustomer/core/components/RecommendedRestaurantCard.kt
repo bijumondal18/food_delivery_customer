@@ -9,10 +9,8 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,13 +45,14 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
 import com.delivery.fooddeliverycustomer.core.theme.Success
+import com.delivery.fooddeliverycustomer.domain.model.restaurant.Restaurant
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun HomeKitchenCard(
-    kitchen: com.delivery.fooddeliverycustomer.domain.model.HomeKitchen,
+fun RecommendedRestaurantCard(
+    restaurant: Restaurant,
     onClick: () -> Unit
 ) {
 
@@ -145,8 +144,8 @@ fun HomeKitchenCard(
             ) {
 
                 AsyncImage(
-                    model = kitchen.imageUrl,
-                    contentDescription = kitchen.name,
+                    model = restaurant.images.firstOrNull(),
+                    contentDescription = restaurant.name,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.matchParentSize()
                 )
@@ -190,7 +189,7 @@ fun HomeKitchenCard(
                     )
 
                     Text(
-                        text = "4.2",
+                        text = "${restaurant.rating}",
                         color = Color.White,
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.SemiBold
@@ -204,7 +203,7 @@ fun HomeKitchenCard(
         )
 
         Text(
-            text = kitchen.name,
+            text = restaurant.name,
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
@@ -258,9 +257,9 @@ fun HomeKitchenCard(
 
                 Text(
                     text = if (deliveryTimeVisible) {
-                        kitchen.deliveryTime
+                        "${restaurant.deliveryTime} min"
                     } else {
-                        kitchen.distance
+                        "${restaurant.distance} km"
                     },
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,

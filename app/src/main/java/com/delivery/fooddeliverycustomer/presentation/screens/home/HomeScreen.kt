@@ -41,135 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import com.delivery.fooddeliverycustomer.core.components.LocationBottomSheet
 import com.delivery.fooddeliverycustomer.domain.model.foodCategories
-import com.delivery.fooddeliverycustomer.domain.model.restaurant.DiscountType
-import com.delivery.fooddeliverycustomer.domain.model.restaurant.Offer
-import com.delivery.fooddeliverycustomer.domain.model.restaurant.Restaurant
-
-
-val restaurants = listOf(
-
-    Restaurant(
-        id = "restaurant_001",
-        name = "Food Palace",
-        description = "Indian, Biryani",
-        logo = null,
-        images = listOf(
-            "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4",
-            "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f"
-        ),
-        cuisines = listOf(
-            "Indian",
-            "Biryani"
-        ),
-        rating = 4.5,
-        totalRatings = 1250,
-        deliveryFee = 30.0,
-        minimumOrderAmount = 199.0,
-        isOpen = true,
-        isPureVeg = false,
-        isPromoted = true,
-    ),
-
-    Restaurant(
-        id = "restaurant_002",
-        name = "Pizza Hub",
-        description = "Pizza, Italian",
-        images = listOf(
-            "https://images.unsplash.com/photo-1513104890138-7c749659a591",
-            "https://images.unsplash.com/photo-1574071318508-1cdbab80d002"
-        ),
-        cuisines = listOf(
-            "Pizza",
-            "Italian"
-        ),
-        rating = 4.4,
-        totalRatings = 980,
-        deliveryFee = 25.0,
-        minimumOrderAmount = 249.0,
-        isOpen = true,
-        isPureVeg = false,
-    ),
-
-    Restaurant(
-        id = "restaurant_003",
-        name = "Burger House",
-        description = "Burgers, Fast Food",
-        images = listOf(
-            "https://images.unsplash.com/photo-1568901346375-23c9450c58cd",
-            "https://images.unsplash.com/photo-1571091718767-18b5b1457add"
-        ),
-        cuisines = listOf(
-            "Burgers",
-            "Fast Food"
-        ),
-        rating = 4.3,
-        totalRatings = 750,
-        deliveryFee = 20.0,
-        minimumOrderAmount = 149.0,
-        isOpen = true,
-        isPureVeg = false,
-    ),
-
-    Restaurant(
-        id = "restaurant_004",
-        name = "Spice Garden",
-        description = "Indian, North Indian",
-        images = listOf(
-            "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f",
-            "https://images.unsplash.com/photo-1601050690597-df0568f70950"
-        ),
-        cuisines = listOf(
-            "Indian",
-            "North Indian"
-        ),
-        rating = 4.6,
-        totalRatings = 1520,
-        deliveryFee = 30.0,
-        minimumOrderAmount = 199.0,
-        isOpen = true,
-        isPureVeg = true,
-    ),
-
-    Restaurant(
-        id = "restaurant_005",
-        name = "Dragon Wok",
-        description = "Chinese, Asian",
-        images = listOf(
-            "https://images.unsplash.com/photo-1512058564366-18510be2db19",
-            "https://images.unsplash.com/photo-1563245372-f21724e3856d"
-        ),
-        cuisines = listOf(
-            "Chinese",
-            "Asian"
-        ),
-        rating = 4.2,
-        totalRatings = 620,
-        deliveryFee = 35.0,
-        minimumOrderAmount = 299.0,
-        isOpen = true,
-        isPureVeg = false,
-    ),
-
-    Restaurant(
-        id = "restaurant_006",
-        name = "Sweet Treats",
-        description = "Desserts, Bakery",
-        images = listOf(
-            "https://images.unsplash.com/photo-1551024506-0bccd828d307",
-            "https://images.unsplash.com/photo-1578985545062-69928b1d9587"
-        ),
-        cuisines = listOf(
-            "Desserts",
-            "Bakery"
-        ),
-        rating = 4.7,
-        totalRatings = 2100,
-        deliveryFee = 15.0,
-        minimumOrderAmount = 99.0,
-        isOpen = true,
-        isPureVeg = true,
-    )
-)
+import com.delivery.fooddeliverycustomer.domain.model.restaurant.RestaurantMockData
 
 
 @Composable
@@ -316,7 +188,7 @@ fun HomeScreen(
                     // Categories
 
                     CategorySection(
-                        categories = _root_ide_package_.com.delivery.fooddeliverycustomer.domain.model.foodCategories,
+                        categories = foodCategories,
                         selectedCategory = selectedCategory,
                         onSeeAllClick = {},
                         onCategoryClick = {category ->
@@ -336,8 +208,9 @@ fun HomeScreen(
 
             // Recommended With Deals Section
             item {
-                HomeKitchenSection(
-                    onKitchenClick = { kitchen ->
+                RecommendedWithDealsSection(
+                    restaurant = RestaurantMockData.recommendedRestaurants,
+                    onRestaurantClick = { restaurant ->
                         // Navigate to home kitchen details
                     }
                 )
@@ -353,8 +226,8 @@ fun HomeScreen(
 
             // Popular Restaurants
             item {
-                RestaurantSection(
-                    restaurants = restaurants,
+                NearbyRestaurantSection(
+                    restaurants = RestaurantMockData.recommendedRestaurants,
                     onSeeAllClick = {},
                     onRestaurantClick = {}
                 )
@@ -370,7 +243,7 @@ fun HomeScreen(
 
             item {
                 AllRestaurantSection (
-                    restaurants =restaurants,
+                    restaurants =RestaurantMockData.nearbyRestaurants,
                     onRestaurantClick = {}
                 )
             }
