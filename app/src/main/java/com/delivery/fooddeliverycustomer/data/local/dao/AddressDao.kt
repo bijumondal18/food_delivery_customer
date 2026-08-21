@@ -14,11 +14,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AddressDao {
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM addresses
         WHERE userId = :userId
         ORDER BY isDefault DESC
-    """)
+    """
+    )
     fun observeAddresses(
         userId: String
     ): Flow<List<AddressEntity>>
@@ -40,20 +42,24 @@ interface AddressDao {
         address: AddressEntity
     )
 
-    @Query("""
+    @Query(
+        """
         UPDATE addresses
         SET isDefault = 0
         WHERE userId = :userId
-    """)
+    """
+    )
     suspend fun clearDefaultAddress(
         userId: String
     )
 
-    @Query("""
+    @Query(
+        """
         UPDATE addresses
         SET isDefault = 1
         WHERE id = :addressId
-    """)
+    """
+    )
     suspend fun setDefaultAddress(
         addressId: String
     )

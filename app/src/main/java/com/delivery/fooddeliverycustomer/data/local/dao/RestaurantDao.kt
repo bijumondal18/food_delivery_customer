@@ -12,27 +12,33 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RestaurantDao {
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM restaurants
         ORDER BY rating DESC
-    """)
+    """
+    )
     fun observeRestaurants():
             Flow<List<RestaurantEntity>>
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM restaurants
         WHERE id = :restaurantId
         LIMIT 1
-    """)
+    """
+    )
     fun observeRestaurant(
         restaurantId: String
     ): Flow<RestaurantEntity?>
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM restaurants
         WHERE name LIKE '%' || :query || '%'
         ORDER BY rating DESC
-    """)
+    """
+    )
     fun searchRestaurants(
         query: String
     ): Flow<List<RestaurantEntity>>

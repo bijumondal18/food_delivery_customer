@@ -11,44 +11,51 @@ import com.delivery.fooddeliverycustomer.data.local.entity.FoodItemEntity
 import kotlinx.coroutines.flow.Flow
 
 
-
 @Dao
 interface FoodItemDao {
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM food_items
         WHERE restaurantId = :restaurantId
         AND isAvailable = 1
-    """)
+    """
+    )
     fun observeFoodItems(
         restaurantId: String
     ): Flow<List<FoodItemEntity>>
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM food_items
         WHERE restaurantId = :restaurantId
         AND categoryId = :categoryId
         AND isAvailable = 1
-    """)
+    """
+    )
     fun observeFoodByCategory(
         restaurantId: String,
         categoryId: String
     ): Flow<List<FoodItemEntity>>
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM food_items
         WHERE name LIKE '%' || :query || '%'
         AND isAvailable = 1
-    """)
+    """
+    )
     fun searchFood(
         query: String
     ): Flow<List<FoodItemEntity>>
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM food_items
         WHERE id = :foodItemId
         LIMIT 1
-    """)
+    """
+    )
     fun observeFoodItem(
         foodItemId: String
     ): Flow<FoodItemEntity?>
@@ -60,10 +67,12 @@ interface FoodItemDao {
         items: List<FoodItemEntity>
     )
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM food_items
         WHERE restaurantId = :restaurantId
-    """)
+    """
+    )
     suspend fun deleteRestaurantFood(
         restaurantId: String
     )

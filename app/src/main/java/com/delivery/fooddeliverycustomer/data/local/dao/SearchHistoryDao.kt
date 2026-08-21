@@ -10,12 +10,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SearchHistoryDao {
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM search_history
         WHERE userId = :userId
         ORDER BY createdAt DESC
         LIMIT 10
-    """)
+    """
+    )
     fun observeHistory(
         userId: String
     ): Flow<List<SearchHistoryEntity>>
@@ -27,10 +29,12 @@ interface SearchHistoryDao {
         history: SearchHistoryEntity
     )
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM search_history
         WHERE userId = :userId
-    """)
+    """
+    )
     suspend fun clearHistory(
         userId: String
     )

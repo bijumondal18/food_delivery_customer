@@ -1,7 +1,6 @@
 package com.delivery.fooddeliverycustomer.data.local.dao
 
 
-
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -18,19 +17,23 @@ import kotlinx.coroutines.flow.Flow
 interface CartDao {
 
     @Transaction
-    @Query("""
+    @Query(
+        """
         SELECT * FROM carts
         WHERE userId = :userId
         LIMIT 1
-    """)
+    """
+    )
     fun observeCart(
         userId: String
     ): Flow<CartEntity?>
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM cart_items
         WHERE cartId = :cartId
-    """)
+    """
+    )
     fun observeCartItems(
         cartId: String
     ): Flow<List<CartItemEntity>>
@@ -54,13 +57,15 @@ interface CartDao {
         item: CartItemEntity
     )
 
-    @Query("""
+    @Query(
+        """
         UPDATE cart_items
         SET quantity = :quantity,
             totalPrice = :totalPrice
         WHERE cartId = :cartId
         AND foodItemId = :foodItemId
-    """)
+    """
+    )
     suspend fun updateQuantity(
         cartId: String,
         foodItemId: String,
@@ -68,37 +73,45 @@ interface CartDao {
         totalPrice: Double
     )
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM cart_items
         WHERE cartId = :cartId
         AND foodItemId = :foodItemId
-    """)
+    """
+    )
     suspend fun deleteCartItem(
         cartId: String,
         foodItemId: String
     )
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM cart_items
         WHERE cartId = :cartId
-    """)
+    """
+    )
     suspend fun clearCartItems(
         cartId: String
     )
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM carts
         WHERE userId = :userId
-    """)
+    """
+    )
     suspend fun clearCart(
         userId: String
     )
 
-    @Query("""
+    @Query(
+        """
         UPDATE carts
         SET syncStatus = :status
         WHERE id = :cartId
-    """)
+    """
+    )
     suspend fun updateSyncStatus(
         cartId: String,
         status: String

@@ -10,20 +10,24 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NotificationDao {
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM notifications
         WHERE userId = :userId
         ORDER BY createdAt DESC
-    """)
+    """
+    )
     fun observeNotifications(
         userId: String
     ): Flow<List<NotificationEntity>>
 
-    @Query("""
+    @Query(
+        """
         SELECT COUNT(*) FROM notifications
         WHERE userId = :userId
         AND isRead = 0
-    """)
+    """
+    )
     fun observeUnreadCount(
         userId: String
     ): Flow<Int>
@@ -35,20 +39,24 @@ interface NotificationDao {
         notification: NotificationEntity
     )
 
-    @Query("""
+    @Query(
+        """
         UPDATE notifications
         SET isRead = 1
         WHERE id = :notificationId
-    """)
+    """
+    )
     suspend fun markAsRead(
         notificationId: String
     )
 
-    @Query("""
+    @Query(
+        """
         UPDATE notifications
         SET isRead = 1
         WHERE userId = :userId
-    """)
+    """
+    )
     suspend fun markAllAsRead(
         userId: String
     )

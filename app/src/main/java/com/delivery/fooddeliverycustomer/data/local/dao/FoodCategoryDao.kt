@@ -11,16 +11,17 @@ import com.delivery.fooddeliverycustomer.data.local.entity.FoodCategoryEntity
 import kotlinx.coroutines.flow.Flow
 
 
-
 @Dao
 interface FoodCategoryDao {
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM food_categories
         WHERE restaurantId = :restaurantId
         AND isActive = 1
         ORDER BY sortOrder ASC
-    """)
+    """
+    )
     fun observeCategories(
         restaurantId: String
     ): Flow<List<FoodCategoryEntity>>
@@ -32,10 +33,12 @@ interface FoodCategoryDao {
         categories: List<FoodCategoryEntity>
     )
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM food_categories
         WHERE restaurantId = :restaurantId
-    """)
+    """
+    )
     suspend fun deleteRestaurantCategories(
         restaurantId: String
     )

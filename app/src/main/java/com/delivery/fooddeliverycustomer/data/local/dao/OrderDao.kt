@@ -12,20 +12,24 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface OrderDao {
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM orders
         WHERE userId = :userId
         ORDER BY createdAt DESC
-    """)
+    """
+    )
     fun observeOrders(
         userId: String
     ): Flow<List<OrderEntity>>
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM orders
         WHERE id = :orderId
         LIMIT 1
-    """)
+    """
+    )
     fun observeOrder(
         orderId: String
     ): Flow<OrderEntity?>
@@ -49,7 +53,8 @@ interface OrderDao {
         order: OrderEntity
     )
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM orders
         WHERE userId = :userId
         AND orderStatus IN (
@@ -62,7 +67,8 @@ interface OrderDao {
         )
         ORDER BY createdAt DESC
         LIMIT 1
-    """)
+    """
+    )
     fun observeActiveOrder(
         userId: String
     ): Flow<OrderEntity?>
