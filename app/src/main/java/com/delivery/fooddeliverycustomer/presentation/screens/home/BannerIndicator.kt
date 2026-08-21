@@ -15,12 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.delivery.fooddeliverycustomer.data.model.home.Banner
+import com.delivery.fooddeliverycustomer.domain.model.home.Banner
 
 @Composable
 fun BannerIndicator(
     pagerState: PagerState,
-    banners: List<Banner>
+    banners: List<com.delivery.fooddeliverycustomer.domain.model.home.Banner>
 ) {
 
     Row(

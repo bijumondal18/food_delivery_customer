@@ -29,11 +29,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.delivery.fooddeliverycustomer.data.model.FoodCategory
+import com.delivery.fooddeliverycustomer.domain.model.FoodCategory
 
 @Composable
 fun FoodCategoryItem(
-    category: FoodCategory,
+    category: com.delivery.fooddeliverycustomer.domain.model.FoodCategory,
     onClick: () -> Unit
 ) {
 

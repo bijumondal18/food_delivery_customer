@@ -22,12 +22,12 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.delivery.fooddeliverycustomer.core.components.AllRestaurantCard
 import com.delivery.fooddeliverycustomer.core.components.RestaurantCard
-import com.delivery.fooddeliverycustomer.data.model.Restaurant
+import com.delivery.fooddeliverycustomer.domain.model.Restaurant
 
 @Composable
 fun AllRestaurantSection(
-    restaurants: List<Restaurant>,
-    onRestaurantClick: (Restaurant) -> Unit
+    restaurants: List<com.delivery.fooddeliverycustomer.domain.model.Restaurant>,
+    onRestaurantClick: (com.delivery.fooddeliverycustomer.domain.model.Restaurant) -> Unit
 ) {
 
     Column(

@@ -9,11 +9,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.delivery.fooddeliverycustomer.data.model.home.Banner
+import com.delivery.fooddeliverycustomer.domain.model.home.Banner
 
 @Composable
 fun BannerItem(
-    banner: Banner
+    banner: com.delivery.fooddeliverycustomer.domain.model.home.Banner
 ) {
 
     AsyncImage(

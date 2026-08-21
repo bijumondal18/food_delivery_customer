@@ -40,8 +40,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import com.delivery.fooddeliverycustomer.core.components.LocationBottomSheet
-import com.delivery.fooddeliverycustomer.data.model.foodCategories
-import com.delivery.fooddeliverycustomer.data.model.restaurants
+import com.delivery.fooddeliverycustomer.domain.model.foodCategories
+import com.delivery.fooddeliverycustomer.domain.model.restaurants
 
 
 @Composable
@@ -188,7 +188,7 @@ fun HomeScreen(
                     // Categories
 
                     CategorySection(
-                        categories = foodCategories,
+                        categories = _root_ide_package_.com.delivery.fooddeliverycustomer.domain.model.foodCategories,
                         selectedCategory = selectedCategory,
                         onSeeAllClick = {},
                         onCategoryClick = {category ->
@@ -230,7 +230,7 @@ fun HomeScreen(
             // Popular Restaurants
             item {
                 RestaurantSection(
-                    restaurants = restaurants,
+                    restaurants = _root_ide_package_.com.delivery.fooddeliverycustomer.domain.model.restaurants,
                     onSeeAllClick = {},
                     onRestaurantClick = {}
                 )
@@ -246,7 +246,7 @@ fun HomeScreen(
 
             item {
                 AllRestaurantSection (
-                    restaurants = restaurants,
+                    restaurants = _root_ide_package_.com.delivery.fooddeliverycustomer.domain.model.restaurants,
                     onRestaurantClick = {}
                 )
             }

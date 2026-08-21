@@ -76,14 +76,20 @@ dependencies {
     // Hilt
     implementation("com.google.dagger:hilt-android:2.57")
     ksp("com.google.dagger:hilt-compiler:2.57")
-
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Location
     implementation("com.google.android.gms:play-services-location:21.3.0")
 
-    // Datastore for local DB
-    implementation("androidx.datastore:datastore-preferences:1.1.7")
+    // WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.11.2")
+
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.2.1")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
 
     // Coil
     implementation("io.coil-kt.coil3:coil-compose:3.3.0")

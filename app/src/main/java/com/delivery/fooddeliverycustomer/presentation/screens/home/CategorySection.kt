@@ -24,19 +24,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.delivery.fooddeliverycustomer.data.model.FoodCategory
+import com.delivery.fooddeliverycustomer.domain.model.FoodCategory
 
 @Composable
 fun CategorySection(
-    categories: List<FoodCategory>,
+    categories: List<com.delivery.fooddeliverycustomer.domain.model.FoodCategory>,
     selectedCategory: String = "All",
     onSeeAllClick: () -> Unit,
-    onCategoryClick: (FoodCategory?) -> Unit
+    onCategoryClick: (com.delivery.fooddeliverycustomer.domain.model.FoodCategory?) -> Unit
 ) {
 
     // Add "All" as the first tab
     val allCategories = remember(categories) {
-        listOf<FoodCategory?>(null) + categories
+        listOf<com.delivery.fooddeliverycustomer.domain.model.FoodCategory?>(null) + categories
     }
 
     Column(

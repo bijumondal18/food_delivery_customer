@@ -3,7 +3,7 @@ package com.delivery.fooddeliverycustomer.presentation.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delivery.fooddeliverycustomer.core.location.LocationManager
-import com.delivery.fooddeliverycustomer.data.model.user.UserLocation
+import com.delivery.fooddeliverycustomer.domain.model.user.UserLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
 
                 _uiState.update {
                     it.copy(
-                        location = UserLocation(
+                        location = _root_ide_package_.com.delivery.fooddeliverycustomer.domain.model.user.UserLocation(
                             latitude = location.latitude,
                             longitude = location.longitude,
                             address = address

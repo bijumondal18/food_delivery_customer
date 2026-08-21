@@ -4,8 +4,8 @@ package com.delivery.fooddeliverycustomer.core.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import com.delivery.fooddeliverycustomer.data.model.HomeKitchen
-import com.delivery.fooddeliverycustomer.data.model.homeKitchens
+import com.delivery.fooddeliverycustomer.domain.model.HomeKitchen
+import com.delivery.fooddeliverycustomer.domain.model.homeKitchens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -39,7 +39,7 @@ import coil3.compose.AsyncImage
 
 @Composable
 fun HomeKitchenCard(
-    kitchen: HomeKitchen,
+    kitchen: com.delivery.fooddeliverycustomer.domain.model.HomeKitchen,
     onClick: () -> Unit
 ) {
 

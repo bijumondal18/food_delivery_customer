@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.delivery.fooddeliverycustomer.data.model.home.Banner
+import com.delivery.fooddeliverycustomer.domain.model.home.Banner
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -32,22 +32,22 @@ fun HomeBannerPager(
 
     val banners = listOf(
 
-        Banner(
+        _root_ide_package_.com.delivery.fooddeliverycustomer.domain.model.home.Banner(
             id = "1",
             image = "https://images.unsplash.com/photo-1504674900247-0877df9cc836"
         ),
 
-        Banner(
+        _root_ide_package_.com.delivery.fooddeliverycustomer.domain.model.home.Banner(
             id = "2",
             image = "https://images.unsplash.com/photo-1513104890138-7c749659a591"
         ),
 
-        Banner(
+        _root_ide_package_.com.delivery.fooddeliverycustomer.domain.model.home.Banner(
             id = "3",
             image = "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38"
         ),
 
-        Banner(
+        _root_ide_package_.com.delivery.fooddeliverycustomer.domain.model.home.Banner(
             id = "4",
             image = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1"
         )

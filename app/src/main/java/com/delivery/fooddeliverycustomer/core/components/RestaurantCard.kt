@@ -62,13 +62,13 @@ import coil3.compose.AsyncImage
 import com.delivery.fooddeliverycustomer.R
 import com.delivery.fooddeliverycustomer.core.ui.theme.LightForeground
 import com.delivery.fooddeliverycustomer.core.ui.theme.Success
-import com.delivery.fooddeliverycustomer.data.model.Restaurant
+import com.delivery.fooddeliverycustomer.domain.model.Restaurant
 import kotlin.io.path.Path
 import kotlin.io.path.moveTo
 
 @Composable
  fun RestaurantCard(
-    restaurant: Restaurant,
+    restaurant: com.delivery.fooddeliverycustomer.domain.model.Restaurant,
     onClick: () -> Unit,
     onFavouriteClick: () -> Unit
 ) {
@@ -189,7 +189,7 @@ import kotlin.io.path.moveTo
 
 @Composable
 fun AllRestaurantCard(
-    restaurant: Restaurant,
+    restaurant: com.delivery.fooddeliverycustomer.domain.model.Restaurant,
     onClick: () -> Unit,
     onFavouriteClick: () -> Unit
 ) {
